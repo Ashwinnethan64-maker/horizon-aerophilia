@@ -117,3 +117,4 @@ apiRouter.post('/whatif', async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message || 'What-if processing failed' });
   }
 });
+

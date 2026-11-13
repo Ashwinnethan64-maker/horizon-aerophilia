@@ -38,3 +38,4 @@ describe('Engine - Foundations & Contracts', () => {
     expect(opt.scoreDelta).toBeGreaterThanOrEqual(0);
   });
 });
+

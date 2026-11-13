@@ -28,7 +28,7 @@
 | State              | Zustand                                               | Minimal boilerplate, shared across Owner and Student views    |
 | Simulation view    | SVG (Canvas if it lags)                               | About 100 dots and a few buses; easy to style and debug       |
 | Charts             | Recharts                                              | Demand heatmap, before/after comparisons                      |
-| Backend            | Node.js + TypeScript + Express (or Fastify)           | Same language as frontend, so contract types are shared       |
+| Backend            | Node.js + TypeScript + Express                        | Express server sharing TypeScript contract types directly with frontend |
 | Engine             | Pure TypeScript modules inside the backend            | Deterministic, testable, no framework dependencies            |
 | LLM access         | Backend `/api/whatif` route                           | Keeps the API key server-side                                 |
 | Validation         | Zod                                                   | Validates request bodies and LLM JSON                         |
@@ -36,7 +36,7 @@
 | Persistence        | In-memory on the backend (JSON fixtures as seed)      | No database or auth needed                                    |
 | Hosting            | Frontend on Vercel/Netlify; backend on Render/Railway | Free tiers, deploy from GitHub                                |
 
-**Fallback if the team is Python-strong:** backend in FastAPI with the engine in Python, keeping the same API contract. The frontend is unaffected.
+**Framework Decision:** Backend is standardized on Express (`express`) with TypeScript for route definitions, in-memory state, and contract validation.
 
 ---
 
@@ -236,7 +236,7 @@ A surprise constraint in the challenge should mean adding a new patch type, not 
 
 ### 6.2 API layer (`/backend/src/api`)
 
-- Express/Fastify server, CORS configured for the frontend origin
+- Express server, CORS configured for the frontend origin
 - Zod validation on every request body
 - In-memory store seeded from `/contracts/fixtures`
 - During early development, routes call a **stub engine** that returns `sample-simresult.json`, then switch to the real engine at the first integration checkpoint

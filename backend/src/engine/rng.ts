@@ -11,3 +11,4 @@ export function createRNG(seed: number = 42) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+

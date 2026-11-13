@@ -39,3 +39,4 @@ export const ScenarioBar: React.FC = () => {
     </div>
   );
 };
+

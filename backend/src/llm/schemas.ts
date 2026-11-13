@@ -44,3 +44,4 @@ export const OptimizeRequestSchema = z.object({
   scenarioId: z.string().optional(),
   seed: z.number().optional()
 });
+

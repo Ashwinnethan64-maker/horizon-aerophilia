@@ -92,3 +92,4 @@ AGENTS.md               # Workflow governance & invariants
 - **Checkpoint 3 (2:00):** Track A delivers `optimize()`; full optimization loop wired end-to-end.
 - **Checkpoint 4 (2:20):** Track C merges LLM what-if translation.
 - **Feature Freeze (2:30):** Bug fixes, visual polish, and demo rehearsal.
+

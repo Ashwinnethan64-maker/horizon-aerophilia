@@ -28,17 +28,17 @@ See `ARCHITECTURE.md` for the system design. This document says who does what, i
 
 Do this together, because everything after depends on it.
 
-- [ ] Create the GitHub repo (public) and add all three developers
-- [ ] Create the folder skeleton: `/contracts`, `/backend`, `/frontend`
-- [ ] **Dev 3 leads, all agree:** write `/contracts/types.ts` (Network, Bus, Student, Scenario, SimResult, Weights)
-- [ ] **Dev 3 leads, all agree:** write `/contracts/api.md` with every endpoint's request and response
-- [ ] **Dev 3 leads:** write `/contracts/fixtures/network.json` (about 6 stops, 3 buses) and `students.json` (about 100)
-- [ ] **Dev 1 leads:** hand-write `/contracts/fixtures/sample-simresult.json` in the exact `SimResult` shape (a short event timeline plus metrics)
-- [ ] Scaffold frontend (Vite + React + TS + Tailwind) and backend (Node + TS + Express)
-- [ ] Add `.env.example` files, `.gitignore`, and a root `README.md`
-- [ ] Create branches: `feat/engine`, `feat/owner-ui`, `feat/api-student`
+- [x] Create the GitHub repo (public) and add all three developers
+- [x] Create the folder skeleton: `/contracts`, `/backend`, `/frontend`
+- [x] **Dev 3 leads, all agree:** write `/contracts/types.ts` (Network, Bus, Student, Scenario, SimResult, Weights)
+- [x] **Dev 3 leads, all agree:** write `/contracts/api.md` with every endpoint's request and response
+- [x] **Dev 3 leads:** write `/contracts/fixtures/network.json` (about 6 stops, 3 buses) and `students.json` (about 100)
+- [x] **Dev 1 leads:** hand-write `/contracts/fixtures/sample-simresult.json` in the exact `SimResult` shape (a short event timeline plus metrics)
+- [x] Scaffold frontend (Vite + React + TS + Tailwind) and backend (Node + TS + Express)
+- [x] Add `.env.example` files, `.gitignore`, and a root `README.md`
+- [x] Create branches: `feat/engine`, `feat/owner-ui`, `feat/api-student`
 
-**Exit check:** all three can run their app locally, and the types and fixtures are committed to `main`.
+**Exit check:** all three can run their app locally, and the types and fixtures are committed to `main`. (Completed)
 
 ---
 

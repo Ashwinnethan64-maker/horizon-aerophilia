@@ -57,3 +57,4 @@ export async function parseWhatIf(prompt: string, apiKey?: string): Promise<What
     newTime: '07:45'
   };
 }
+

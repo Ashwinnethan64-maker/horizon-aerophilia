@@ -162,3 +162,4 @@ export interface WhatIfResponse {
   explanation: string;
   result: SimResult;
 }
+

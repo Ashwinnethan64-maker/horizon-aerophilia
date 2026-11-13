@@ -13,3 +13,4 @@ const result = simulate(network, students, undefined, 42);
 console.log('\n--- BASELINE METRICS ---');
 console.table(result.metrics);
 console.log(`Total events recorded: ${result.events.length}`);
+

@@ -20,3 +20,4 @@ export function generateExplanation(
 
   return `Action ${action.action} executed. Serves ${afterMetrics.servedOnTime} students on time with ${afterMetrics.stranded} stranded.`;
 }
+

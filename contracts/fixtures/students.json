@@ -93,3 +93,4 @@
   { "id": "ST-092", "name": "Pinku Meena", "homeStopId": "S2", "destinationId": "S6", "arriveBy": "08:30", "days": [1, 2, 3, 4, 5] },
   { "id": "ST-093", "name": "Munna Kanwar", "homeStopId": "S5", "destinationId": "S6", "arriveBy": "08:30", "days": [1, 2, 3, 4, 5] }
 ]
+

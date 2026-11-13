@@ -22,3 +22,4 @@ console.table({
   'Viability Gap ($)': { Before: opt.before.metrics.viabilityGap, After: opt.after.metrics.viabilityGap }
 });
 console.log(`\nScore Improvement: +${opt.scoreDelta}`);
+

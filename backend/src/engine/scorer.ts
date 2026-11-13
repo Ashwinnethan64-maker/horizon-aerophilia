@@ -17,3 +17,4 @@ export function scoreMetrics(metrics: SimMetrics, weights: Weights = DEFAULT_WEI
 
   return Math.round(score * 10) / 10;
 }
+

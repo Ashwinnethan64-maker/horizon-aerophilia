@@ -31,3 +31,4 @@ export const DemandHeatmap: React.FC = () => {
     </div>
   );
 };
+

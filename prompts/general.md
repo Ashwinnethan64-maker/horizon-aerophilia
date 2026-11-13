@@ -20,3 +20,13 @@ Role: Project Lead / Architecture & Planning
   - Added `vitest.config.ts` and configured `tsconfig.json` to prevent transpiled `.js` test conflicts.
   - Added `vite/client` types and cleaned unused imports in frontend components to ensure zero-error TypeScript builds.
 
+### [2026-11-13 11:35] Prompt #2 — Standardize on Express for Backend
+- **User Prompt:** use express for the backend. edit the plan and documentation as needed.
+- **Context / Goal:** Standardize documentation, system architecture, and execution plan on Express for the backend service, removing references to alternative frameworks.
+- **Action Taken / Result:**
+  - Verified backend implementation is built on Express (`express`, `@types/express`, `cors`, `zod` in `backend/src/api/server.ts` and `routes.ts`).
+  - Updated `ARCHITECTURE.md` tech stack table and system design to firmly lock in Node.js + TypeScript + Express, removing Fastify/FastAPI alternatives.
+  - Updated `PLAN.md` to check off completed Phase 0 setup milestones and confirm Express server setup.
+- **Issues / Debugging:** None. Express backend is fully wired, verified, and operational.
+
+
