@@ -318,7 +318,7 @@ def render_prompt_entry(seq_num: int, data: dict[str, Any]) -> str:
     )
     return (
         "\n---\n\n"
-        f"### {title}\n"
+        f"### {title}\n\n"
         "`[LATEST PROMPT IN SESSION]`\n\n"
         f"- **Timestamp:** {data.get('timestamp', 'Unavailable')}\n"
         f"- **User:** {data.get('user', 'Unavailable')}\n"
@@ -399,15 +399,15 @@ def render_memory_entry(exec_num: int, data: dict[str, Any]) -> str:
         f"- **Date & Time:** {data.get('timestamp', 'Unavailable')}\n"
         f"- **User (Prompted by):** {data.get('user', 'Unavailable')}\n"
         f"- **Implementer (Executed by):** {data.get('model', 'Antigravity (Unavailable)')}\n\n"
-        "### What\n"
+        "### What\n\n"
         f"{safe_what}\n\n"
-        "### Why\n"
+        "### Why\n\n"
         f"{data.get('why', 'Initial requirement')}\n\n"
-        "### Fix / Actions\n"
+        "### Fix / Actions\n\n"
         + "\n".join(actions_lines)
-        + "\n\n### Status\n"
+        + "\n\n### Status\n\n"
         f"{data.get('status', 'In Progress')}\n\n"
-        "### AI Output\n"
+        "### AI Output\n\n"
         f"{safe_out}\n\n"
         "---\n"
     )

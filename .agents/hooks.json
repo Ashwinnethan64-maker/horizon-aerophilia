@@ -3,28 +3,28 @@
     "SessionStart": [
       {
         "type": "command",
-        "command": "python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py",
+        "command": "if [ -f ./scripts/prompt_logger.py ]; then python ./scripts/prompt_logger.py || python3 ./scripts/prompt_logger.py; else python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py; fi",
         "timeout": 15
       }
     ],
     "PreInvocation": [
       {
         "type": "command",
-        "command": "python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py",
+        "command": "if [ -f ./scripts/prompt_logger.py ]; then python ./scripts/prompt_logger.py || python3 ./scripts/prompt_logger.py; else python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py; fi",
         "timeout": 15
       }
     ],
     "PostInvocation": [
       {
         "type": "command",
-        "command": "python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py",
+        "command": "if [ -f ./scripts/prompt_logger.py ]; then python ./scripts/prompt_logger.py || python3 ./scripts/prompt_logger.py; else python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py; fi",
         "timeout": 15
       }
     ],
     "Stop": [
       {
         "type": "command",
-        "command": "python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py",
+        "command": "if [ -f ./scripts/prompt_logger.py ]; then python ./scripts/prompt_logger.py || python3 ./scripts/prompt_logger.py; else python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py; fi",
         "timeout": 15
       }
     ]
@@ -33,24 +33,23 @@
     "PreInvocation": [
       {
         "type": "command",
-        "command": "python .agents/scripts/memory_updater.py || python3 .agents/scripts/memory_updater.py",
+        "command": "if [ -f ./scripts/memory_updater.py ]; then python ./scripts/memory_updater.py || python3 ./scripts/memory_updater.py; else python .agents/scripts/memory_updater.py || python3 .agents/scripts/memory_updater.py; fi",
         "timeout": 15
       }
     ],
     "PostInvocation": [
       {
         "type": "command",
-        "command": "python .agents/scripts/memory_updater.py || python3 .agents/scripts/memory_updater.py",
+        "command": "if [ -f ./scripts/memory_updater.py ]; then python ./scripts/memory_updater.py || python3 ./scripts/memory_updater.py; else python .agents/scripts/memory_updater.py || python3 .agents/scripts/memory_updater.py; fi",
         "timeout": 15
       }
     ],
     "Stop": [
       {
         "type": "command",
-        "command": "python .agents/scripts/memory_updater.py || python3 .agents/scripts/memory_updater.py",
+        "command": "if [ -f ./scripts/memory_updater.py ]; then python ./scripts/memory_updater.py || python3 ./scripts/memory_updater.py; else python .agents/scripts/memory_updater.py || python3 .agents/scripts/memory_updater.py; fi",
         "timeout": 15
       }
     ]
   }
 }
-
