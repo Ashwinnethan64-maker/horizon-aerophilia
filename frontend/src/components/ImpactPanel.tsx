@@ -81,11 +81,11 @@ export const ImpactPanel: React.FC = () => {
           )}
           {viewingOptimized && optimizedResult ? (
             <span className="text-xs bg-[#0866F5] text-white border-2 border-[#111111] px-3 py-1 rounded-[4px] font-bold">
-              Optimized Plan
+              {t.optimizedPlan}
             </span>
           ) : (
             <span className="text-xs bg-[#F6F4EA] text-[#111111] border-2 border-[#111111] px-3 py-1 rounded-[4px] font-bold">
-              Baseline Schedule
+              {t.baselineSchedule}
             </span>
           )}
         </div>

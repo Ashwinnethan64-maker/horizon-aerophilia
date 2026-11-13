@@ -9,32 +9,32 @@ export const ScenarioBar: React.FC = () => {
 
   const scenarios = [
     {
-      id: 'baseline',
-      label: 'Normal Day',
+      id: 'baseline' as const,
+      label: t.baseline,
       icon: Sun,
       description: 'Standard school timetable, 100% nominal travel times and demand.'
     },
     {
-      id: 'exam_surge',
-      label: 'Exam Day Surge',
+      id: 'exam_surge' as const,
+      label: t.exam_surge,
       icon: Sparkles,
       description: '1.4x student demand across all stops with early 08:15 AM arrival deadlines.'
     },
     {
-      id: 'monsoon_rain',
-      label: 'Monsoon Rain',
+      id: 'monsoon_rain' as const,
+      label: t.monsoon_rain,
       icon: CloudRain,
       description: 'Travel times +30% slower due to rural waterlogging and road conditions.'
     },
     {
-      id: 'breakdown_b1',
-      label: 'Bus B1 Breakdown',
+      id: 'breakdown_b1' as const,
+      label: t.breakdown_b1,
       icon: Wrench,
       description: 'Northern trunk bus B1 unavailable; capacity removed from Route R1.'
     },
     {
-      id: 'bridge_repair',
-      label: 'Chandan Bridge Closure',
+      id: 'bridge_repair' as const,
+      label: t.bridge_repair,
       icon: ShieldAlert,
       description: 'Route R2 temporarily closed at Stop S5 due to bridge maintenance.'
     }

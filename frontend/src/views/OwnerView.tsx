@@ -184,7 +184,7 @@ export const OwnerView: React.FC = () => {
                   : 'text-yg-textSecondary hover:text-yg-secondary'
               }`}
             >
-              Optimized Plan
+              {t.optimized}
             </button>
           </div>
 
@@ -193,14 +193,14 @@ export const OwnerView: React.FC = () => {
             type="button"
             onClick={() => runOptimization()}
             disabled={isLoading}
-            className="flex items-center gap-2 bg-yg-primary hover:bg-yg-primaryHover text-white px-4 py-2 rounded-yg-btn text-sm font-semibold transition-colors disabled:opacity-50 shadow-xs"
+            className="nb-btn-primary px-4 py-2 text-sm"
           >
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <Zap className="w-4 h-4 fill-white" />
             )}
-            {isLoading ? 'Running Engine...' : 'Optimize Schedule'}
+            {isLoading ? t.optimizing : t.optimizeBtn}
           </button>
         </div>
       </div>

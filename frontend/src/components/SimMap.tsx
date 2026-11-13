@@ -30,8 +30,10 @@ export const SimMap: React.FC = () => {
     selectedStopId,
     setSelectedStopId,
     selectedRouteId,
-    setSelectedRouteId
+    setSelectedRouteId,
+    language
   } = useStore();
+  const isKn = language === 'kn';
 
   const [showLegend, setShowLegend] = useState(true);
   const [showLayerPanel, setShowLayerPanel] = useState(false);
@@ -98,18 +100,20 @@ export const SimMap: React.FC = () => {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-bold text-yg-secondary text-sm sm:text-base leading-none">
-                Mangaluru–Gurupura–Polali Corridor
+              <h2 className="font-display font-bold text-[#111111] text-sm sm:text-base leading-none">
+                {isKn ? 'ಮಂಗಳೂರು–ಗುರುಪುರ–ಪೊಳಲಿ ಕಾರಿಡಾರ್' : 'Mangaluru–Gurupura–Polali Corridor'}
               </h2>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
-                5 km Study Buffer
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FFD93D] text-[#111111] border border-[#111111]">
+                {isKn ? '5 ಕಿ.ಮೀ ಅಧ್ಯಯನ ವ್ಯಾಪ್ತಿ' : '5 km Study Buffer'}
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-yg-secondarySoft text-yg-secondary hidden sm:inline-block">
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#EAF2FF] text-[#0866F5] border border-[#111111] hidden sm:inline-block">
                 OpenStreetMap Leaflet
               </span>
             </div>
-            <p className="text-xs text-yg-textSecondary mt-0.5">
-              Operations simulation map displaying real road geography, bus stops, route lines, and simulated buses.
+            <p className="text-xs text-[#454545] mt-0.5">
+              {isKn
+                ? 'ನೈಜ ರಸ್ತೆ ಭೂಗೋಳ, ಬಸ್ ನಿಲ್ದಾಣಗಳು, ಮಾರ್ಗಗಳು ಮತ್ತು ಸಿಮ್ಯುಲೇಟೆಡ್ ಬಸ್‌ಗಳನ್ನು ತೋರಿಸುವ ನಕ್ಷೆ.'
+                : 'Operations simulation map displaying real road geography, bus stops, route lines, and simulated buses.'}
             </p>
           </div>
         </div>
@@ -126,19 +130,19 @@ export const SimMap: React.FC = () => {
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>Layers ({Object.values(layers).filter(Boolean).length}/8)</span>
+            <span>{isKn ? 'ಪದರಗಳು' : 'Layers'} ({Object.values(layers).filter(Boolean).length}/8)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setShowLegend(!showLegend)}
-            className={`flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-yg-btn font-semibold border transition-colors ${
+            className={`flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-[4px] font-bold border-2 border-[#111111] transition-colors cursor-pointer ${
               showLegend
-                ? 'bg-yg-primarySoft text-yg-primary border-yg-primary/30'
-                : 'bg-white text-yg-textSecondary border-yg-border hover:bg-yg-surfaceSubtle'
+                ? 'bg-[#EAF2FF] text-[#0866F5]'
+                : 'bg-white text-[#454545] hover:bg-[#F6F4EA]'
             }`}
           >
-            <span>Legend</span>
+            <span>{isKn ? 'ಸೂಚಿ' : 'Legend'}</span>
           </button>
         </div>
       </div>

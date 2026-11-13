@@ -18,6 +18,7 @@ import {
 export const LandingView: React.FC = () => {
   const { setRole, students, network, language } = useStore();
   const t = translations[language].landing;
+  const isKn = language === 'kn';
 
   const stopCount = network?.stops.length ?? 6;
   const routeCount = network?.routes.length ?? 2;
@@ -68,11 +69,13 @@ export const LandingView: React.FC = () => {
             <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-semibold text-[#454545]">
               <span className="inline-flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-[#178653]" />
-                Deterministic Timetable Engine
+                {t.deterministicEngine}
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="w-4 h-4 text-[#0866F5]" />
-                {stopCount} Corridor Stops &bull; {routeCount} Routes &bull; {busCount} Fleet Units
+                {isKn
+                  ? `${stopCount} ನಿಲ್ದಾಣಗಳು • ${routeCount} ಮಾರ್ಗಗಳು • ${busCount} ಬಸ್‌ಗಳು`
+                  : `${stopCount} Corridor Stops • ${routeCount} Routes • ${busCount} Fleet Units`}
               </span>
             </div>
           </div>
@@ -83,17 +86,16 @@ export const LandingView: React.FC = () => {
 
             <div className="relative z-10 flex items-center justify-between gap-2 mb-4">
               <span className="bg-[#0866F5] text-white border-2 border-[#111111] px-2.5 py-1 rounded-[4px] font-display text-[11px] font-bold uppercase tracking-wider">
-                Corridor Preview
+                {t.corridorPreview}
               </span>
               <span className="bg-[#FFD93D] text-[#111111] border-2 border-[#111111] px-2.5 py-1 rounded-full font-display text-[11px] font-bold">
-                +5 km Study Buffer
+                {t.studyBuffer}
               </span>
             </div>
 
             {/* Clean SVG Corridor Schematic */}
             <div className="relative z-10 bg-[#FFFDF5] border-2 border-[#111111] rounded-[4px] p-4 shadow-[4px_4px_0_0_#111111]">
-              <svg viewBox="0 0 360 210" className="w-full h-auto" role="img" aria-label="Mangaluru Gurupura Polali bus corridor diagram">
-                {/* 5km Buffer Band */}
+              <svg viewBox="0 0 360 210" className="w-full h-auto" role="img" aria-label={t.corridorPreview}>
                 <path
                   d="M 24 155 Q 150 45 335 72"
                   fill="none"
@@ -101,7 +103,6 @@ export const LandingView: React.FC = () => {
                   strokeWidth="44"
                   strokeLinecap="round"
                 />
-                {/* Primary Trunk Route */}
                 <path
                   d="M 32 155 Q 145 95 205 88 T 325 75"
                   fill="none"
@@ -109,7 +110,6 @@ export const LandingView: React.FC = () => {
                   strokeWidth="6"
                   strokeLinecap="round"
                 />
-                {/* Feeder Route */}
                 <path
                   d="M 140 165 Q 230 140 325 75"
                   fill="none"
@@ -119,45 +119,48 @@ export const LandingView: React.FC = () => {
                   strokeLinecap="round"
                 />
 
-                {/* Stop Nodes */}
                 <g>
                   <circle cx="32" cy="155" r="9" fill="#FFD93D" stroke="#111111" strokeWidth="3" />
                   <text x="20" y="182" fontSize="11" fontWeight="700" fill="#111111" fontFamily="Space Grotesk, sans-serif">
-                    Mangaluru
+                    {isKn ? 'ಮಂಗಳೂರು' : 'Mangaluru'}
                   </text>
                 </g>
                 <g>
                   <circle cx="205" cy="88" r="8" fill="#FFFFFF" stroke="#111111" strokeWidth="3" />
                   <text x="172" y="68" fontSize="11" fontWeight="700" fill="#111111" fontFamily="Space Grotesk, sans-serif">
-                    Gurupura
+                    {isKn ? 'ಗುರುಪುರ' : 'Gurupura'}
                   </text>
                 </g>
                 <g>
                   <circle cx="140" cy="165" r="7" fill="#FFFFFF" stroke="#111111" strokeWidth="3" />
                   <text x="108" y="188" fontSize="10" fontWeight="600" fill="#454545" fontFamily="Inter, sans-serif">
-                    Bondantila
+                    {isKn ? 'ಬೊಂಡಂತಿಲ' : 'Bondantila'}
                   </text>
                 </g>
                 <g>
                   <circle cx="325" cy="75" r="10" fill="#178653" stroke="#111111" strokeWidth="3" />
                   <text x="292" y="54" fontSize="11" fontWeight="700" fill="#111111" fontFamily="Space Grotesk, sans-serif">
-                    Polali
+                    {isKn ? 'ಪೊಳಲಿ' : 'Polali'}
                   </text>
                 </g>
 
-                {/* Simulated Bus Badge */}
                 <g transform="translate(128, 92)">
                   <rect width="40" height="22" rx="3" fill="#0866F5" stroke="#111111" strokeWidth="2.5" />
                   <text x="20" y="15" textAnchor="middle" fontSize="10" fontWeight="700" fill="#FFFFFF" fontFamily="Space Grotesk, sans-serif">
-                    BUS
+                    {isKn ? 'ಬಸ್' : 'BUS'}
                   </text>
                 </g>
               </svg>
             </div>
 
             <div className="relative z-10 mt-4 flex items-center justify-between text-xs text-[#EAF2FF]">
-              <span>Shared Demand Registry: <strong className="text-[#FFD93D]">{students.length} Students</strong></span>
-              <span className="font-mono text-[11px]">SIMULATED</span>
+              <span>
+                {t.sharedDemand}{' '}
+                <strong className="text-[#FFD93D]">
+                  {students.length} {t.studentsCount}
+                </strong>
+              </span>
+              <span className="font-mono text-[11px]">{t.simulatedTag}</span>
             </div>
           </div>
         </div>
@@ -167,7 +170,7 @@ export const LandingView: React.FC = () => {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <span className="font-display text-xs font-bold uppercase tracking-wider px-2.5 py-1 bg-[#EAF2FF] text-[#0866F5] border-2 border-[#111111] rounded-[4px]">
-            The Rural Mobility Gap
+            {t.problemBadge}
           </span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -175,28 +178,22 @@ export const LandingView: React.FC = () => {
             <div className="w-9 h-9 rounded-[4px] bg-[#D93636] text-white border-2 border-[#111111] flex items-center justify-center">
               <Users className="w-5 h-5" />
             </div>
-            <h2 className="font-display font-bold text-lg text-[#111111]">Overloaded Peak Buses</h2>
-            <p className="text-sm text-[#454545] leading-relaxed">
-              Intermediate village stops face packed buses at 07:30 AM, leaving students stranded before school hours.
-            </p>
+            <h2 className="font-display font-bold text-lg text-[#111111]">{t.prob1Title}</h2>
+            <p className="text-sm text-[#454545] leading-relaxed">{t.prob1Desc}</p>
           </div>
           <div className="nb-card p-5 space-y-2">
             <div className="w-9 h-9 rounded-[4px] bg-[#FFD93D] text-[#111111] border-2 border-[#111111] flex items-center justify-center">
               <Bus className="w-5 h-5" />
             </div>
-            <h2 className="font-display font-bold text-lg text-[#111111]">Mismatched Empty Runs</h2>
-            <p className="text-sm text-[#454545] leading-relaxed">
-              Operators run fixed timetables without clear stop-by-stop student demand data, hurting daily viability.
-            </p>
+            <h2 className="font-display font-bold text-lg text-[#111111]">{t.prob2Title}</h2>
+            <p className="text-sm text-[#454545] leading-relaxed">{t.prob2Desc}</p>
           </div>
           <div className="nb-card p-5 space-y-2">
             <div className="w-9 h-9 rounded-[4px] bg-[#0866F5] text-white border-2 border-[#111111] flex items-center justify-center">
               <Clock className="w-5 h-5" />
             </div>
-            <h2 className="font-display font-bold text-lg text-[#111111]">Uncertain Student Journeys</h2>
-            <p className="text-sm text-[#454545] leading-relaxed">
-              Students lack clear scheduled pickup times, crowding expectations, and honest fallback options.
-            </p>
+            <h2 className="font-display font-bold text-lg text-[#111111]">{t.prob3Title}</h2>
+            <p className="text-sm text-[#454545] leading-relaxed">{t.prob3Desc}</p>
           </div>
         </div>
       </section>
@@ -206,13 +203,13 @@ export const LandingView: React.FC = () => {
         <div className="nb-card-shadow p-6 sm:p-7 flex flex-col justify-between space-y-5 bg-white">
           <div className="space-y-3">
             <span className="inline-block bg-[#10233F] text-white text-xs font-display font-bold uppercase tracking-wider px-2.5 py-1 rounded-[4px]">
-              For Bus Owners &amp; Operators
+              {t.ownerTag}
             </span>
             <h2 className="font-display font-bold text-2xl text-[#111111]">
-              Operations Command Centre
+              {t.ownerTitle}
             </h2>
             <p className="text-sm text-[#454545] leading-relaxed">
-              Inspect stop-level demand heatmaps, replay deterministic timetable simulations on an interactive Leaflet map, test What-If changes, and optimize fleet schedules.
+              {t.ownerDesc}
             </p>
           </div>
           <button
@@ -220,20 +217,20 @@ export const LandingView: React.FC = () => {
             onClick={() => setRole('owner')}
             className="nb-btn-primary px-5 py-3 text-sm self-start"
           >
-            Open Owner Portal <ArrowRight className="w-4 h-4" />
+            {t.openOwner} <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
         <div className="nb-card-shadow p-6 sm:p-7 flex flex-col justify-between space-y-5 bg-[#EAF2FF]">
           <div className="space-y-3">
             <span className="inline-block bg-[#FFD93D] text-[#111111] border-2 border-[#111111] text-xs font-display font-bold uppercase tracking-wider px-2.5 py-1 rounded-[4px]">
-              For Students &amp; Parents
+              {t.studentTag}
             </span>
             <h2 className="font-display font-bold text-2xl text-[#111111]">
-              Student Commute Companion
+              {t.studentTitle}
             </h2>
             <p className="text-sm text-[#454545] leading-relaxed">
-              Check your next scheduled morning bus, view crowding advisories, register your daily boarding stop, and browse corridor routes in English or ಕನ್ನಡ.
+              {t.studentDesc}
             </p>
           </div>
           <button
@@ -241,7 +238,7 @@ export const LandingView: React.FC = () => {
             onClick={() => setRole('student')}
             className="nb-btn-secondary px-5 py-3 text-sm self-start"
           >
-            Open Student Companion <ArrowRight className="w-4 h-4" />
+            {t.openStudent} <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </section>
@@ -250,20 +247,14 @@ export const LandingView: React.FC = () => {
       <section className="nb-card p-6 sm:p-8 bg-white space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display font-bold text-2xl text-[#111111]">
-            How YatraGrid Works
+            {t.howTitle}
           </h2>
           <span className="text-xs font-semibold text-[#454545]">
-            Shared demand data connects both portals
+            {t.howSub}
           </span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {[
-            { step: '01', title: 'Register Demand', desc: 'Students submit home stop, deadline & commute days.' },
-            { step: '02', title: 'Understand Demand', desc: 'Heatmaps highlight over-capacity stops & slots.' },
-            { step: '03', title: 'Simulate', desc: 'Seeded engine replays boarding, waits & stranding.' },
-            { step: '04', title: 'Optimize', desc: 'Respects fleet count, seat capacity & driver hours.' },
-            { step: '05', title: 'Publish Schedule', desc: 'Updated departures appear in Student Companion.' }
-          ].map((item) => (
+          {t.steps.map((item) => (
             <div key={item.step} className="p-4 bg-[#FFFDF5] border-2 border-[#111111] rounded-[4px] space-y-1.5">
               <span className="inline-block font-display font-bold text-xs px-2 py-0.5 bg-[#0866F5] text-white rounded-[4px]">
                 {item.step}
@@ -280,13 +271,13 @@ export const LandingView: React.FC = () => {
         <div className="space-y-2 max-w-2xl">
           <div className="inline-flex items-center gap-1.5 text-xs font-display font-bold uppercase tracking-wider text-[#FFD93D]">
             <ShieldCheck className="w-4 h-4" />
-            Mangaluru–Gurupura–Polali Corridor
+            {t.coverageTag}
           </div>
           <h2 className="font-display font-bold text-2xl sm:text-3xl">
-            Ready to test the corridor simulation?
+            {t.coverageTitle}
           </h2>
           <p className="text-sm text-[#EAF2FF] leading-relaxed">
-            Switch seamlessly between the Owner Operations Console and Student Companion using real deterministic fixtures or the live Express API.
+            {t.coverageDesc}
           </p>
         </div>
 
@@ -297,7 +288,7 @@ export const LandingView: React.FC = () => {
             className="nb-btn-primary px-5 py-3 text-sm"
           >
             <Sliders className="w-4 h-4" />
-            Launch Owner Portal
+            {t.launchOwner}
           </button>
           <button
             type="button"
@@ -305,7 +296,7 @@ export const LandingView: React.FC = () => {
             className="nb-btn-secondary px-5 py-3 text-sm"
           >
             <RouteIcon className="w-4 h-4" />
-            Launch Student Portal
+            {t.launchStudent}
           </button>
         </div>
       </section>
@@ -314,4 +305,3 @@ export const LandingView: React.FC = () => {
 };
 
 export default LandingView;
-
