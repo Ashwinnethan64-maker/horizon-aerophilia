@@ -29,6 +29,25 @@ Owner: Track C
 - **Issues / Debugging:**
   - In `backend/tests/api.test.ts`, corrected property assertion on `OptimizationResult` from `modifications` to `diff` matching `/contracts/types.ts` and `/contracts/api.md`.
 
+### [2026-11-13 11:53] Prompt #4 — Planning: Stage C3 (Frontend Foundation & Shared State)
+- **User Prompt:** /plan check what needs to be done in C3 and plan the implementation
+- **Context / Goal:** Analyze Stage C3 requirements against `PLAN.md` and `ARCHITECTURE.md` Section 7.1, and draft an implementation plan covering typed API client, mock toggle, complete Zustand store slices, and App shell enhancements.
+- **Action Taken / Result:** Audited `client.ts`, `mock.ts`, `useStore.ts`, and `App.tsx`. Formulated plan covering in-memory mock student persistence, interactive Live/Mock toggle in the UI, scenario state slice, and full contract type alignment. Authored implementation plan artifact in `plan_c3.md`.
+- **Issues / Debugging:** None.
+
+### [2026-11-13 11:55] Prompt #5 — Execution of Stage C3 (Frontend Foundation & Shared State)
+- **User Prompt:** Approval of Stage C3 implementation plan
+- **Context / Goal:** Execute Stage C3 to deliver a typed API client, comprehensive fixture-backed mock service, Zustand store implementing all 7 slices from `ARCHITECTURE.md` Section 7.1, and an interactive App shell.
+- **Action Taken / Result:**
+  - Updated `frontend/src/api/client.ts` with typed methods for all 8 contract endpoints, multi-env base URL fallback (`VITE_API_URL` and `VITE_API_BASE_URL`), and reactive `setMockMode()` / `isMock` toggles.
+  - Enhanced `frontend/src/api/mock.ts` with in-memory persistence for `mockStudents`, scenario-specific metric shifts, and exact `OptimizationResult` diff shapes.
+  - Implemented all 7 slices in `frontend/src/store/useStore.ts` (`network`, `students`, `schedule`, `scenarios`, `weights`, `results`, `ui`).
+  - Updated `frontend/src/App.tsx` shell with interactive "Live API" vs "Mock Mode" status badge, role switcher, and error recovery banner.
+  - Successfully verified frontend production build (`tsc && vite build`) and backend Vitest suite (17/17 tests passing).
+- **Issues / Debugging:** None.
+
+
+
 
 
 
