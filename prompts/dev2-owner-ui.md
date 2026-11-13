@@ -68,3 +68,15 @@ Owner: Track B
   - Preserved Track C's runtime `Mock Mode` / `Live API` header toggle in `App.tsx`, adapted `StudentView.tsx` and `OwnerView.tsx` to work seamlessly with both Mock Mode fixtures and live `POLALI-001` data, and added `frontend/src/data/stopCoordinates.ts` wired into `frontend/src/api/client.ts` so all 13 `POLALI-001` stops have real WGS84 Mangaluru–Gurupura–Polali coordinates on the Leaflet map.
   - Verified zero remaining conflict markers (`grep`), `npm --prefix backend run build` (exit 0), `npm --prefix frontend run build` (`tsc && vite build`, exit 0), and `npm --prefix backend test` (`vitest run`: 3 test files, 38/38 tests passed).
 - **Issues / Debugging:** Fixed `parseRuleBased` regex in `backend/src/llm/parseWhatIf.ts` so phrases like `"What if bus B1 breaks down?"` (`breaks`) match `breakdown_b1` and pass `api.test.ts`.
+
+
+### [2026-11-13 18:58] Prompt #6 — Complete Neo-Brutalist UI/UX Redesign (YatraGrid_NeoBrutalism_DESIGN.md)
+- **User Prompt:** `# YATRAGRID — COMPLETE NEO-BRUTALIST UI/UX REDESIGN ... Read frontend/YatraGrid_NeoBrutalism_DESIGN.md completely and treat it as the single source of truth for the new YatraGrid visual identity.`
+- **Context / Goal:** Apply the Neo-Brutalist design system (`#0866F5` Electric Blue, `#10233F` Deep Navy, `#FFFDF5` Cream canvas, `#FFD93D` Signal Yellow, `2px solid #111111` borders, `4px` radius, restrained hard shadows, Space Grotesk headings + Inter body) across Landing Page, App Shell, Owner Dashboard, and Student Dashboard while preserving all simulation, optimizer, Gemini What-If, and registration functionality.
+- **Action Taken / Result:**
+  - Updated `frontend/index.html`, `frontend/tailwind.config.js`, and `frontend/src/index.css` with Space Grotesk + Inter fonts, Neo-Brutalist color tokens, `.nb-card`, `.nb-btn-primary`, `.nb-btn-secondary`, `.nb-btn-outline`, `.nb-input`, and `prefers-reduced-motion` support.
+  - Created `frontend/src/views/LandingView.tsx` implementing the asymmetric 60/40 hero ("Every Student. Every Route. Connected."), Mangaluru–Gurupura–Polali corridor schematic, problem strip, two-portal comparison, 5-step workflow, and local coverage CTA.
+  - Updated `frontend/src/store/useStore.ts` and `frontend/src/App.tsx` with `'landing' | 'owner' | 'student'` navigation, Neo-Brutalist header, `Mock Mode` / `Live API` toggle pill, `EN` / `ಕನ್ನಡ` switcher, and About modal.
+  - Updated `ScenarioBar.tsx`, `DemandHeatmap.tsx`, `ImpactPanel.tsx`, `OwnerView.tsx`, and `StudentView.tsx` (including mobile bottom navigation bar for `<768px` viewports).
+  - Verified `npm --prefix frontend run build` (`tsc && vite build`) passed with 0 errors.
+- **Issues / Debugging:** None.

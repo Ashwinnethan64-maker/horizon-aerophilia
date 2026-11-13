@@ -101,17 +101,17 @@ export const DemandHeatmap: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-yg-card shadow-yg-card border border-yg-border p-5">
+    <div className="bg-white rounded-[4px] shadow-[4px_4px_0_0_#111111] border-2 border-[#111111] p-5">
       <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-2">
-          <BarChart2 className="w-4 h-4 text-yg-primary" />
-          <h3 className="font-semibold text-yg-secondary text-sm">
+          <BarChart2 className="w-4 h-4 text-[#0866F5]" />
+          <h3 className="font-display font-bold text-[#111111] text-sm">
             Stop Demand vs. Available Seats
           </h3>
         </div>
 
         {/* Time slot toggle tabs */}
-        <div className="flex items-center bg-yg-surfaceSubtle p-0.5 rounded-lg text-xs font-semibold border border-yg-border">
+        <div className="flex items-center bg-[#F6F4EA] p-0.5 rounded-[4px] text-xs font-bold border-2 border-[#111111]">
           {(
             [
               { id: 'all', label: 'All Morning' },
@@ -123,10 +123,10 @@ export const DemandHeatmap: React.FC = () => {
               key={tab.id}
               type="button"
               onClick={() => setSlot(tab.id)}
-              className={`px-2.5 py-1 rounded-md transition-colors ${
+              className={`px-2.5 py-1 rounded-[2px] transition-colors cursor-pointer ${
                 slot === tab.id
-                  ? 'bg-white text-yg-secondary shadow-xs border border-yg-border/60'
-                  : 'text-yg-textSecondary hover:text-yg-secondary'
+                  ? 'bg-[#0866F5] text-white'
+                  : 'text-[#454545] hover:text-[#111111]'
               }`}
             >
               {tab.label}
@@ -137,8 +137,8 @@ export const DemandHeatmap: React.FC = () => {
 
       {/* Accessible Bottleneck Callout */}
       {worstStop && worstStop.overCapacityBaseline > 0 && (
-        <div className="mb-3 p-2.5 bg-amber-50/80 border border-amber-200 rounded-lg flex items-center gap-2 text-xs text-amber-900">
-          <AlertCircle className="w-4 h-4 text-yg-warning shrink-0" />
+        <div className="mb-3 p-2.5 bg-[#FFD93D]/40 border-2 border-[#111111] rounded-[4px] flex items-center gap-2 text-xs text-[#111111]">
+          <AlertCircle className="w-4 h-4 text-[#D93636] shrink-0" />
           <span>
             <strong>Capacity Pressure:</strong> {worstStop.stop} is over baseline capacity by{' '}
             <strong>{worstStop.overCapacityBaseline} students</strong> during morning rush.
@@ -162,10 +162,10 @@ export const DemandHeatmap: React.FC = () => {
               }}
             />
             <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
-            <Bar dataKey="demand" fill="#C84C4C" name="Student Demand" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="baselineSeats" fill="#9FB8AC" name="Baseline Seats" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="demand" fill="#D93636" name="Student Demand" radius={[2, 2, 0, 0]} />
+            <Bar dataKey="baselineSeats" fill="#10233F" name="Baseline Seats" radius={[2, 2, 0, 0]} />
             {optimizedSchedule && (
-              <Bar dataKey="optimizedSeats" fill="#176B52" name="Optimized Seats" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="optimizedSeats" fill="#0866F5" name="Optimized Seats" radius={[2, 2, 0, 0]} />
             )}
           </BarChart>
         </ResponsiveContainer>

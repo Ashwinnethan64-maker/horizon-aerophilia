@@ -31,8 +31,8 @@ export type OwnerTab =
 
 interface StoreState {
   // Navigation & Localization
-  role: 'owner' | 'student';
-  setRole: (role: 'owner' | 'student') => void;
+  role: 'landing' | 'owner' | 'student';
+  setRole: (role: 'landing' | 'owner' | 'student') => void;
   language: 'en' | 'kn';
   setLanguage: (lang: 'en' | 'kn') => void;
   activeOwnerTab: OwnerTab;
@@ -90,7 +90,7 @@ interface StoreState {
 }
 
 export const useStore = create<StoreState>((set, get) => ({
-  role: 'owner',
+  role: 'landing',
   setRole: (role) => set({ role }),
   language: 'en',
   setLanguage: (language) => set({ language }),

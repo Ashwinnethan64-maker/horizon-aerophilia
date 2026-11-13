@@ -292,28 +292,28 @@ export const StudentView: React.FC = () => {
   const alternativeBus = activeBuses.find((b) => b.id !== recommendation?.busId);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-12">
+    <div className="max-w-4xl mx-auto space-y-6 pb-24 md:pb-12">
       {/* Mobile-Friendly Hero Card */}
-      <div className="bg-yg-secondary text-white rounded-yg-card p-6 shadow-yg-card relative overflow-hidden">
+      <div className="bg-[#10233F] text-white rounded-[4px] p-6 border-2 border-[#111111] shadow-[6px_6px_0_0_#111111] relative overflow-hidden">
         <div className="relative z-10 max-w-xl">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#24476B] text-[11px] font-semibold text-yg-primarySoft mb-3 border border-[#3A5D82]">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFD93D] text-[11px] font-display font-bold text-[#111111] mb-3 border-2 border-[#111111]">
             <Clock className="w-3 h-3" />
             <span>{t.scheduledTag}</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">
+          <h2 className="font-display text-xl sm:text-2xl font-bold tracking-tight mb-2">
             {t.portalTitle}
           </h2>
-          <p className="text-yg-primarySoft text-xs sm:text-sm leading-relaxed">
+          <p className="text-[#EAF2FF] text-xs sm:text-sm leading-relaxed">
             {t.portalSubtitle}
           </p>
         </div>
-        <div className="absolute right-4 bottom-4 text-slate-700/30 hidden sm:block">
+        <div className="absolute right-4 bottom-4 text-white/10 hidden sm:block">
           <Bus className="w-24 h-24 stroke-1" />
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="grid grid-cols-4 gap-1 bg-white p-1.5 rounded-yg-card border border-yg-border shadow-xs text-xs font-semibold">
+      {/* Desktop / Tablet Navigation Tabs */}
+      <div className="hidden md:grid grid-cols-4 gap-1.5 bg-white p-1.5 rounded-[4px] border-2 border-[#111111] shadow-[4px_4px_0_0_#111111] text-xs font-bold">
         <button
           type="button"
           onClick={() => setActiveTab('my_bus')}
@@ -815,6 +815,52 @@ export const StudentView: React.FC = () => {
           </div>
         </div>
       )}
+      {/* Mobile Bottom Navigation Bar */}
+      <nav
+        aria-label="Student Mobile Navigation"
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t-2 border-[#111111] grid grid-cols-4 gap-1 p-1.5"
+      >
+        <button
+          type="button"
+          onClick={() => setActiveTab('my_bus')}
+          className={`min-h-[44px] py-1.5 rounded-[4px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold cursor-pointer ${
+            activeTab === 'my_bus' ? 'bg-[#0866F5] text-white' : 'text-[#454545]'
+          }`}
+        >
+          <Bus className="w-4 h-4" />
+          <span className="truncate">{t.myBusTab}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('register')}
+          className={`min-h-[44px] py-1.5 rounded-[4px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold cursor-pointer ${
+            activeTab === 'register' ? 'bg-[#0866F5] text-white' : 'text-[#454545]'
+          }`}
+        >
+          <MapPin className="w-4 h-4" />
+          <span className="truncate">{t.registerTab}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('routes')}
+          className={`min-h-[44px] py-1.5 rounded-[4px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold cursor-pointer ${
+            activeTab === 'routes' ? 'bg-[#0866F5] text-white' : 'text-[#454545]'
+          }`}
+        >
+          <Navigation className="w-4 h-4" />
+          <span className="truncate">{t.routesTab}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('alerts')}
+          className={`min-h-[44px] py-1.5 rounded-[4px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold cursor-pointer ${
+            activeTab === 'alerts' ? 'bg-[#0866F5] text-white' : 'text-[#454545]'
+          }`}
+        >
+          <Bell className="w-4 h-4" />
+          <span className="truncate">{t.alertsTab}</span>
+        </button>
+      </nav>
     </div>
   );
 };

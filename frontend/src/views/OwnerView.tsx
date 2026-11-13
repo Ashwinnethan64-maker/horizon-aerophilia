@@ -153,19 +153,19 @@ export const OwnerView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Bar: Scenarios & Primary Actions */}
-      <div className="bg-white p-4 rounded-yg-card shadow-yg-card border border-yg-border flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+      <div className="bg-white p-4 rounded-[4px] shadow-[4px_4px_0_0_#111111] border-2 border-[#111111] flex flex-col xl:flex-row xl:items-center justify-between gap-4">
         <ScenarioBar />
 
         <div className="flex flex-wrap items-center gap-3 shrink-0">
           {/* Baseline vs Optimized Toggle */}
-          <div className="flex items-center bg-yg-surfaceSubtle p-1 rounded-yg-btn border border-yg-border text-xs font-semibold">
+          <div className="flex items-center bg-[#F6F4EA] p-1 rounded-[4px] border-2 border-[#111111] text-xs font-bold">
             <button
               type="button"
               onClick={() => handleSwitchPlan(false)}
-              className={`px-3 py-1.5 rounded-md transition-colors ${
+              className={`px-3 py-1.5 rounded-[2px] transition-colors cursor-pointer ${
                 !viewingOptimized
-                  ? 'bg-white text-yg-secondary shadow-xs'
-                  : 'text-yg-textSecondary hover:text-yg-secondary'
+                  ? 'bg-[#10233F] text-white'
+                  : 'text-[#454545] hover:text-[#111111]'
               }`}
             >
               Baseline

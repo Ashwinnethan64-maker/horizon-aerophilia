@@ -54,35 +54,35 @@ export const ImpactPanel: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-yg-card shadow-yg-card border border-yg-border p-5">
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-yg-border">
+    <div className="bg-white rounded-[4px] shadow-[4px_4px_0_0_#111111] border-2 border-[#111111] p-5">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b-2 border-[#111111]">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="font-semibold text-yg-secondary text-base">
+            <h2 className="font-display font-bold text-[#111111] text-base">
               Performance &amp; Financial Viability Metrics
             </h2>
-            <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-yg-secondarySoft text-yg-secondary">
+            <span className="text-[10px] uppercase font-display font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#EAF2FF] text-[#0866F5] border border-[#111111]">
               Simulated
             </span>
           </div>
-          <p className="text-xs text-yg-textSecondary mt-0.5">
+          <p className="text-xs text-[#454545] mt-0.5">
             Holistic assessment of student accessibility, travel comfort, and carrier operating costs.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           {viewingOptimized && optimizedResult && scoreDelta !== null && (
-            <span className="inline-flex items-center gap-1 text-xs bg-yg-primarySoft text-yg-primary px-3 py-1 rounded-full font-bold border border-yg-primary/25">
-              <Sparkles className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-1 text-xs bg-[#FFD93D] text-[#111111] px-3 py-1 rounded-full font-bold border-2 border-[#111111]">
+              <Sparkles className="w-3.5 h-3.5 text-[#0866F5]" />
               Score {scoreDelta >= 0 ? `+${scoreDelta.toFixed(1)}` : scoreDelta.toFixed(1)}
             </span>
           )}
           {viewingOptimized && optimizedResult ? (
-            <span className="text-xs bg-yg-primary text-white px-3 py-1 rounded-yg-btn font-semibold shadow-xs">
+            <span className="text-xs bg-[#0866F5] text-white border-2 border-[#111111] px-3 py-1 rounded-[4px] font-bold">
               Optimized Plan
             </span>
           ) : (
-            <span className="text-xs bg-yg-surfaceSubtle text-yg-secondary border border-yg-border px-3 py-1 rounded-yg-btn font-semibold">
+            <span className="text-xs bg-[#F6F4EA] text-[#111111] border-2 border-[#111111] px-3 py-1 rounded-[4px] font-bold">
               Baseline Schedule
             </span>
           )}

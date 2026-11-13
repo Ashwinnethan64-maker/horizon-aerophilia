@@ -55,14 +55,14 @@ export const ScenarioBar: React.FC = () => {
               type="button"
               disabled={isLoading}
               onClick={() => setActiveScenarioId(sc.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-yg-btn text-xs font-semibold transition-all shrink-0 border disabled:opacity-50 ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] text-xs font-bold transition-all shrink-0 border-2 border-[#111111] cursor-pointer disabled:opacity-50 ${
                 isActive
-                  ? 'bg-yg-secondary text-white border-yg-secondary shadow-xs'
-                  : 'bg-white border-yg-border text-yg-secondary hover:bg-yg-surfaceSubtle'
+                  ? 'bg-[#FFD93D] text-[#111111] shadow-[3px_3px_0_0_#111111]'
+                  : 'bg-white text-[#111111] hover:bg-[#EAF2FF]'
               }`}
             >
               <Icon
-                className={`w-3.5 h-3.5 ${isActive ? 'text-yg-accent' : 'text-yg-textSecondary'}`}
+                className={`w-3.5 h-3.5 ${isActive ? 'text-[#0866F5]' : 'text-[#454545]'}`}
               />
               {sc.label}
             </button>
