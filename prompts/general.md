@@ -38,5 +38,11 @@ Role: Project Lead / Architecture & Planning
   - Added active local `.env` files in `backend/` and `frontend/` matching `.env.example` configurations for zero-config developer onboarding (with `.gitignore` protection verified).
 - **Issues / Debugging:** Confirmed zero remaining configuration changes needed; Express is active and verified across all endpoints.
 
+### [2026-11-13 13:43] Prompt #4 — Project Overview
+- **User Prompt:** could you give me an overview of this prohect
+- **Context / Goal:** Provide an architectural and operational overview of the Routeless project: problem domain, core principles, system architecture, tech stack, and current implementation status.
+- **Action Taken / Result:** Summarized the project structure, 3-track parallel development methodology, deterministic simulation/optimization engine, student/owner frontend views, and offline-resilient contract architecture.
+- **Issues / Debugging:** None.
+
 
 

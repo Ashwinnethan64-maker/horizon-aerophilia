@@ -140,6 +140,17 @@ Owner: Track C
 - **Action Taken / Result:** Audited `git status`, `git branch -a -v`, and remote commit logs. Confirmed that all work on `feat/api-student` up to commit `810f379` is pushed and clean on `origin/feat/api-student`. Noted that teammate commit `87e6bad` ("Complete Backend Engine") was recently pushed to `origin/main`.
 - **Issues / Debugging:** None.
 
+### [2026-11-13 14:03] Prompt #14 — Vercel Build Failure (Merge Conflict in StudentView.tsx)
+- **User Prompt:** Vercel build log showing `error TS1185: Merge conflict marker encountered` in `src/views/StudentView.tsx` on commit `db186bc` of `github.com/Amal-v-s/horizon-aerophilia`.
+- **Context / Goal:** Resolve TypeScript build errors caused by merge conflict markers during Vercel deployment.
+- **Action Taken / Result:**
+  - Diagnosed root cause: Earlier merge commit `0a29923` ("Finalized commit") was pushed with un-resolved conflict markers in `StudentView.tsx` and other files.
+  - In commit `a30c12e` on `main` (`origin/main`), all conflict markers were already completely resolved, Leaflet map overhauled, and code cleaned up.
+  - Verified local build: ran `npm --prefix frontend run build` (`tsc && vite build`) which finished with exit code 0 (`dist/` built in 40.30s), and `npm --prefix backend test` (38/38 tests passing).
+  - Identified that the Vercel project is pulling from `github.com/Amal-v-s/horizon-aerophilia` which is pinned to outdated/conflicted commit `db186bc`.
+  - Provided exact instructions to sync `Amal-v-s/horizon-aerophilia` with latest `origin/main` (`a30c12e`) to trigger a clean Vercel build.
+- **Issues / Debugging:** Conflict markers existed on `Amal-v-s`'s fork prior to commit `a30c12e`; syncing latest `main` resolves all errors.
+
 
 
 
