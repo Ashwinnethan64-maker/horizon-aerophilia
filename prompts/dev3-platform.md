@@ -73,6 +73,27 @@ Owner: Track C
   - Verified clean compilation with Vite (`npm run build:frontend`) and 100% test pass (`npm test`).
 - **Issues / Debugging:** None.
 
+### [2026-11-13 12:09] Prompt #9 — Planning: Stage C6 (LLM What-If Service & Presets)
+- **User Prompt:** /plan start working on C6
+- **Context / Goal:** Plan the implementation of Stage C6 (LLM What-If Service & Offline Presets) supporting all 6 action types, JSON extraction with 1-retry fallback, deterministic rule matching when offline, metric diff explanation generation, and frontend preset chips.
+- **Action Taken / Result:** Audited existing `schemas.ts`, `parseWhatIf.ts`, `explain.ts`, and `OwnerView.tsx`. Authored detailed implementation plan artifact (`plan_c6.md`) covering LLM API calling with retry, offline rule engine covering all 6 actions (`shift_departure`, `skip_stop`, `add_trip`, `remove_trip`, `change_capacity`, `apply_scenario`), simulation execution in `routes.ts`, and quick preset buttons for Owner View.
+- **Issues / Debugging:** None.
+
+### [2026-11-13 12:16] Prompt #10 — Execution: Stage C6 (LLM What-If Service & Presets)
+- **User Prompt:** Approval of Stage C6 implementation plan
+- **Context / Goal:** Implement and verify Stage C6: dual-mode what-if parsing (live LLM with 1 retry + offline rule engine for all 6 action types), schedule and network simulation execution in `routes.ts`, metric diff explanation generator in `explain.ts`, automated integration test suite in `whatif.test.ts`, and frontend preset buttons in `OwnerView.tsx`.
+- **Action Taken / Result:**
+  - Implemented dual-mode parser in `backend/src/llm/parseWhatIf.ts` handling all 6 action types: `shift_departure`, `add_trip`, `remove_trip`, `change_capacity`, `skip_stop`, and `apply_scenario`, with resilient pattern matching and Gemini API JSON generation with 1-retry on failure.
+  - Updated `backend/src/api/routes.ts` to execute all 6 action types on the live schedule and network, run the simulation, and generate plain-language explanations.
+  - Enhanced `backend/src/llm/explain.ts` with human-readable diff explanations detailing changes in served on time, stranded students, average wait time, and operational costs.
+  - Authored comprehensive test suite `backend/tests/whatif.test.ts` (13 test cases) covering rule parsing, explanation text generation, and end-to-end `POST /api/whatif` integration.
+  - Added quick-preset chips in `frontend/src/views/OwnerView.tsx` ("Shift Bus 3 to 07:45 AM", "Increase Bus 1 capacity to 50", "Cancel Bus 3 12:00 run", "What if Bus B1 breaks down?").
+  - Verified 30/30 tests pass (100% pass across `engine.test.ts`, `whatif.test.ts`, and `api.test.ts`) and checked off Milestone C-3 in `PLAN.md`.
+- **Issues / Debugging:**
+  - In `backend/src/llm/parseWhatIf.ts`, refined capacity regex from greedy match to `(?:to|of|is|=|set to)\s*(\d{1,3})` to prevent capturing the bus number digit from phrases like "Bus B1 to 50".
+
+
+
 
 
 

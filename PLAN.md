@@ -208,14 +208,14 @@ Do this together, because everything after depends on it.
 
 ### C6. LLM what-if service (2:00 to 2:25)
 
-- [ ] `llm/schemas.ts`: Zod schemas for allowed actions
-- [ ] `llm/parseWhatIf.ts`: prompt that outputs JSON only; validate and retry once on failure
-- [ ] `/api/whatif`: parse, apply to schedule, simulate, return result plus explanation
-- [ ] `llm/explain.ts`: plain-language summary of the metric diff
-- [ ] Preset what-ifs that bypass the LLM entirely
-- [ ] Graceful error message if the LLM provider fails
+- [x] `llm/schemas.ts`: Zod schemas for allowed actions
+- [x] `llm/parseWhatIf.ts`: prompt that outputs JSON only; validate and retry once on failure
+- [x] `/api/whatif`: parse, apply to schedule, simulate, return result plus explanation
+- [x] `llm/explain.ts`: plain-language summary of the metric diff
+- [x] Preset what-ifs that bypass the LLM entirely
+- [x] Graceful error message if the LLM provider fails
 
-**Milestone C-3 (about 2:20):** a typed what-if returns a result and explanation, and presets work with the LLM off.
+**Milestone C-3 (about 2:20):** a typed what-if returns a result and explanation, and presets work with the LLM off. (Completed)
 
 ### C7. Deployment hardening and docs (2:25 to 2:50)
 
