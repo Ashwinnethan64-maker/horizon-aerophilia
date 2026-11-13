@@ -137,11 +137,15 @@ export const OwnerView: React.FC = () => {
                 min="1"
                 max="20"
                 value={weights.served}
-                onChange={(e) => setWeights({ served: Number(e.target.value) })}
+                onChange={(e) => {
+                  const accessWeight = Number(e.target.value);
+                  const viabilityWeight = Math.max(0.1, Number((2 - ((accessWeight - 1) / 19) * 1.9).toFixed(1)));
+                  setWeights({ served: accessWeight, viability: viabilityWeight });
+                }}
                 className="w-full accent-indigo-600"
               />
               <p className="text-xs text-slate-500">
-                Prioritizes serving remote students at high-cost stops vs clustering runs for fuel efficiency.
+                Access weight: {weights.served.toFixed(0)} · Viability weight: {weights.viability.toFixed(1)}. Higher access shifts more weight toward students served on time.
               </p>
             </div>
           </div>
@@ -156,7 +160,7 @@ export const OwnerView: React.FC = () => {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="e.g. Move Bus 3 to 7:45 AM..."
+                  placeholder="e.g. Move BUS001 to 7:30 AM, or close R02..."
                   value={whatIfText}
                   onChange={(e) => setWhatIfText(e.target.value)}
                   className="w-full text-xs px-3 py-2 pr-9 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"

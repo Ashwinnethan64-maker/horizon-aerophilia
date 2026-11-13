@@ -18,6 +18,8 @@ npm install
 npm run dev
 ```
 - API health check: `http://localhost:3001/api/health`
+- Source transport dataset: `http://localhost:3001/api/dataset`
+- Optional what-if provider: set `LLM_API_KEY`, `LLM_API_URL`, and `LLM_MODEL` in `backend/.env`; deterministic parsing remains available without a key.
 - Run deterministic engine tests: `npm test`
 - Run baseline simulator CLI: `npm run sim`
 - Run schedule optimizer CLI: `npm run optimize`
@@ -58,6 +60,8 @@ The project is architected into 3 decoupled parallel tracks joined by `/contract
   types.ts              # Canonical shared TypeScript data contracts
   api.md                # Full REST API request/response specifications
   /fixtures
+    transport-dataset.json # Mangaluru / Polali routes, fleet, allocations, and economics
+    optimized-schedule.json # Precomputed Polali allocation used as optimizer fallback
     network.json        # 6 stops, 2 routes, 3 buses synthetic network
     students.json       # ~95 student demand registrations with morning mismatch
     sample-simresult.json # Timeline events and performance metrics fixture

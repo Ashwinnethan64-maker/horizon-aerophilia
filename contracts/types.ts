@@ -11,6 +11,7 @@ export interface Route {
   stopIds: string[];
   travelMinutes: number[]; // travel time between consecutive stops (length = stopIds.length - 1)
   destinationStopId: string; // school or college terminal
+  distanceKm?: number;
 }
 
 export interface Bus {
@@ -20,6 +21,13 @@ export interface Bus {
   departureTimes: string[]; // "HH:MM" 24-hr format
   costPerKm: number;
   maxDriverHours: number;
+  crewCostPerDay?: number;
+  permittedRouteIds?: string[];
+}
+
+export interface NetworkEconomics {
+  averageFare: number;
+  crewCostPerBusPerDay: number;
 }
 
 export interface Student {
@@ -29,12 +37,62 @@ export interface Student {
   destinationId: string;
   arriveBy: string; // "HH:MM" target arrival deadline
   days: number[]; // 0-6 (0 = Sunday, 1 = Monday, etc.)
+  routeId?: string;
 }
 
 export interface Network {
   stops: Stop[];
   routes: Route[];
   buses: Bus[];
+  economics?: NetworkEconomics;
+  simulationId?: string;
+  optimizedAllocation?: Record<string, number>;
+}
+
+export interface OptimizedScheduleSeed {
+  simulationId: string;
+  assignments: Array<{
+    busId: string;
+    routeId: string;
+    departureTimes: string[];
+  }>;
+}
+
+export interface TransportDataset {
+  simulation: {
+    id: string;
+    name: string;
+    type: string;
+    totalBuses: number;
+    availableBuses: number;
+    maintenanceBuses: number;
+    capacityPerBus: number;
+    peakPeriod: string;
+  };
+  routes: Array<{
+    id: string;
+    name: string;
+    stops: string[];
+    distanceKm: number;
+    travelMinutes: number;
+    demand: number;
+    priority: number;
+    allocatedBuses: number;
+  }>;
+  fleet: Array<{
+    id: string;
+    operator: string;
+    capacity: number;
+    status: 'available' | 'maintenance';
+  }>;
+  optimizedAllocation: Record<string, number>;
+  economics: {
+    dieselPrice: number;
+    mileageKmPerLitre: number;
+    maintenanceCostPerKm: number;
+    crewCostPerBusPerDay: number;
+    averageFare: number;
+  };
 }
 
 export type PatchType =
@@ -107,6 +165,8 @@ export interface ScheduleDiffItem {
   oldDepartures: string[];
   newDepartures: string[];
   changeDescription: string;
+  oldRouteId?: string;
+  newRouteId?: string;
 }
 
 export interface OptimizationResult {
@@ -138,6 +198,7 @@ export type WhatIfActionType =
   | 'add_trip'
   | 'remove_trip'
   | 'change_capacity'
+  | 'close_route'
   | 'apply_scenario';
 
 export interface WhatIfAction {
@@ -159,6 +220,7 @@ export interface WhatIfRequest {
 export interface WhatIfResponse {
   parsedAction: WhatIfAction;
   appliedScenario?: Scenario;
+  actionDescription?: string;
   explanation: string;
   result: SimResult;
 }

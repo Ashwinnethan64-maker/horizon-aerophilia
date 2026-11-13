@@ -50,52 +50,52 @@ Do this together, because everything after depends on it.
 
 ### A1. Foundations (0:20 to 0:45)
 
-- [ ] `rng.ts`: seeded random number generator (same seed, same sequence)
-- [ ] Time helpers: parse `"HH:MM"` to minutes and back
-- [ ] Load fixtures and validate them against the types
+- [x] `rng.ts`: seeded random number generator (same seed, same sequence)
+- [x] Time helpers: parse `"HH:MM"` to minutes and back with strict 24-hour validation
+- [x] Load fixtures and validate them against the types and cross-reference invariants
 
 ### A2. Simulator (0:45 to 1:15)
 
-- [ ] 1-minute tick loop from about 06:00 to 10:00
-- [ ] Student arrival at stops from the demand data
-- [ ] Bus movement along route stops using `travelMinutes`
-- [ ] Boarding up to capacity; leftovers wait for the next bus or become stranded
-- [ ] Event timeline output (`board`, `strand`, `arrive`, `bus_position`) matching `sample-simresult.json`
-- [ ] Metrics: served on time, stranded, average wait, load factor, revenue, cost, viability gap
-- [ ] Headless mode (skips event recording, for speed)
-- [ ] `npm run sim` CLI that prints baseline metrics
+- [x] 1-minute tick loop from 06:00 to 10:00
+- [x] Seeded student arrivals at stops from demand records
+- [x] Bus movement along route stops using `travelMinutes`
+- [x] Boarding up to capacity; leftovers wait for later trips or become stranded
+- [x] Event timeline output (`board`, `strand`, `arrive`, `bus_position`) matching `sample-simresult.json`
+- [x] Metrics: served on time, stranded, average wait, load factor, revenue, cost, viability gap
+- [x] Headless mode skips event recording while preserving metrics
+- [x] `npm run sim` CLI prints baseline metrics
 
 **Milestone A-1 (about 1:15):** `simulate()` returns a valid `SimResult`. Hand it to Dev 3 to wire into `/api/simulate`.
 
 ### A3. Scorer and scenarios (1:15 to 1:40)
 
-- [ ] `scorer.ts` using `W1..W4` from `Weights`
-- [ ] `scenarios.ts`: patch types (`demandMultiplier`, `capacityMultiplier`, `travelTimeMultiplier`, `removeBus`, `closeRoute`)
-- [ ] Preset scenarios: exam surge, rain, breakdown, route closure
+- [x] `scorer.ts` uses all four `Weights` terms and validates metric and weight inputs
+- [x] `scenarios.ts` applies `demandMultiplier`, `capacityMultiplier`, `travelTimeMultiplier`, `removeBus`, `closeRoute`, and `shiftDeparture` patches
+- [x] Preset scenarios: exam surge, rain, breakdown, route closure
 
 ### A4. Optimizer (1:40 to 2:15)
 
-- [ ] Random-restart hill climbing over departure offsets and bus-to-route assignment
-- [ ] Respect constraints: capacity, driver hours, permitted routes
-- [ ] Cap runtime (about 1 to 2 seconds) or a fixed iteration count
-- [ ] Output: new schedule, diff against old, before and after `SimResult`
-- [ ] Precompute and save a good default schedule as a fallback
-- [ ] CLI: `npm run optimize` prints baseline vs optimized
+- [x] Seeded random-restart hill climbing over departure offsets and bus-to-route assignment
+- [x] Respect constraints: vehicle capacity, driver hours, and optional permitted routes
+- [x] Cap the search at a fixed number of candidate evaluations
+- [x] Output: new schedule, route/departure diff, and before/after `SimResult`
+- [x] Precompute the POLALI-001 default schedule in `optimized-schedule.json` as a fallback
+- [x] CLI: `npm run optimize` prints baseline vs optimized
 
 **Milestone A-2 (about 2:00):** `optimize()` is exported and beats baseline on the fixture network.
 
 ### A5. Tests and hardening (2:15 to 2:30)
 
-- [ ] Same seed gives identical `SimResult`
-- [ ] Boarded count never exceeds capacity
-- [ ] Optimized score is at least baseline score on the fixtures
-- [ ] Each scenario patch changes the result in the expected direction
-- [ ] Handle empty demand and a closed route without crashing
+- [x] Same seed gives identical `SimResult`
+- [x] Boarded count never exceeds capacity
+- [x] Optimized score is at least baseline score on the fixtures
+- [x] Each scenario patch changes the result in the expected direction
+- [x] Handle empty demand and a closed route without crashing
 
 ### A6. Support (2:30 onward)
 
-- [ ] Help debug integration issues and tune optimizer weights for a good demo
-- [ ] If done early, take the LLM what-if service from Track C (see Handoffs)
+- [x] Debug engine/API integration and tune optimizer weights for the demo
+- [x] Complete the LLM what-if service handoff from Track C
 
 ### Track A: definition of done
 
@@ -208,12 +208,12 @@ Do this together, because everything after depends on it.
 
 ### C6. LLM what-if service (2:00 to 2:25)
 
-- [ ] `llm/schemas.ts`: Zod schemas for allowed actions
-- [ ] `llm/parseWhatIf.ts`: prompt that outputs JSON only; validate and retry once on failure
-- [ ] `/api/whatif`: parse, apply to schedule, simulate, return result plus explanation
-- [ ] `llm/explain.ts`: plain-language summary of the metric diff
-- [ ] Preset what-ifs that bypass the LLM entirely
-- [ ] Graceful error message if the LLM provider fails
+- [x] `llm/schemas.ts`: Zod schemas for allowed actions
+- [x] `llm/parseWhatIf.ts`: JSON-only provider prompt, validation, and one retry for invalid output
+- [x] `/api/whatif`: parse, apply to schedule, simulate, and return result plus explanation
+- [x] `llm/explain.ts`: plain-language summary of the metric diff
+- [x] Preset and recognized commands bypass the LLM
+- [x] Deterministic fallback handles common requests when the provider fails; unsupported requests return a clear validation error
 
 **Milestone C-3 (about 2:20):** a typed what-if returns a result and explanation, and presets work with the LLM off.
 

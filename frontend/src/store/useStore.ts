@@ -75,7 +75,7 @@ export const useStore = create<StoreState>((set, get) => ({
     served: 10.0,
     wait: 2.0,
     crowding: 1.5,
-    viability: 1.0
+    viability: 1.1
   },
   setWeights: (newWeights) =>
     set((state) => ({ weights: { ...state.weights, ...newWeights } })),
@@ -111,7 +111,16 @@ export const useStore = create<StoreState>((set, get) => ({
     try {
       const activeId = scenarioId ?? get().activeScenarioId;
       const res = await api.simulate(activeId);
-      set({ baselineResult: res, isLoading: false, replayTimeIndex: 0 });
+      set({
+        baselineResult: res,
+        optimizedResult: null,
+        optimizedSchedule: null,
+        scheduleDiff: null,
+        scoreDelta: null,
+        viewingOptimized: false,
+        isLoading: false,
+        replayTimeIndex: 0
+      });
     } catch (err: any) {
       set({ error: err.message || 'Simulation failed', isLoading: false });
     }

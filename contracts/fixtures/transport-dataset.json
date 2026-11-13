@@ -1,0 +1,35 @@
+{
+  "simulation": {
+    "id": "POLALI-001",
+    "name": "Mangaluru Rural Transport Network",
+    "type": "synthetic",
+    "totalBuses": 12,
+    "availableBuses": 11,
+    "maintenanceBuses": 1,
+    "capacityPerBus": 40,
+    "peakPeriod": "07:00-10:00"
+  },
+  "routes": [
+    { "id": "R01", "name": "Kettikal Corridor", "stops": ["State Bank", "Vamanjoor", "Kettikal", "Bondanthila", "Tharigudde", "Polali"], "distanceKm": 24, "travelMinutes": 55, "demand": 135, "priority": 4, "allocatedBuses": 4 },
+    { "id": "R02", "name": "Mallur Corridor", "stops": ["State Bank", "Vamanjoor", "Ulaibettu", "Mallur", "Polali"], "distanceKm": 27, "travelMinutes": 62, "demand": 95, "priority": 4, "allocatedBuses": 3 },
+    { "id": "R03", "name": "Gurupura Corridor", "stops": ["State Bank", "Vamanjoor", "Gurupura", "Kaikamba", "Malali", "Polali"], "distanceKm": 25, "travelMinutes": 58, "demand": 175, "priority": 5, "allocatedBuses": 3 },
+    { "id": "R04", "name": "Kudupu Corridor", "stops": ["State Bank", "Kulshekar", "Kudupu", "Vamanjoor", "Polali"], "distanceKm": 22, "travelMinutes": 52, "demand": 70, "priority": 3, "allocatedBuses": 1 },
+    { "id": "R05", "name": "Gurupura Feeder", "stops": ["State Bank", "Vamanjoor", "Gurupura", "Kaikamba"], "distanceKm": 20, "travelMinutes": 45, "demand": 110, "priority": 5, "allocatedBuses": 0 }
+  ],
+  "fleet": [
+    { "id": "BUS001", "operator": "Coastal Travels", "capacity": 40, "status": "available" },
+    { "id": "BUS002", "operator": "Coastal Travels", "capacity": 40, "status": "available" },
+    { "id": "BUS003", "operator": "Coastal Travels", "capacity": 40, "status": "available" },
+    { "id": "BUS004", "operator": "Coastal Travels", "capacity": 40, "status": "maintenance" },
+    { "id": "BUS005", "operator": "City Connect", "capacity": 40, "status": "available" },
+    { "id": "BUS006", "operator": "City Connect", "capacity": 40, "status": "available" },
+    { "id": "BUS007", "operator": "City Connect", "capacity": 40, "status": "available" },
+    { "id": "BUS008", "operator": "City Connect", "capacity": 40, "status": "available" },
+    { "id": "BUS009", "operator": "Malnad Transport", "capacity": 40, "status": "available" },
+    { "id": "BUS010", "operator": "Malnad Transport", "capacity": 40, "status": "available" },
+    { "id": "BUS011", "operator": "Malnad Transport", "capacity": 40, "status": "available" },
+    { "id": "BUS012", "operator": "Malnad Transport", "capacity": 40, "status": "available" }
+  ],
+  "optimizedAllocation": { "R01": 3, "R02": 2, "R03": 3, "R04": 1, "R05": 2 },
+  "economics": { "dieselPrice": 95, "mileageKmPerLitre": 5, "maintenanceCostPerKm": 3, "crewCostPerBusPerDay": 1000, "averageFare": 20 }
+}
