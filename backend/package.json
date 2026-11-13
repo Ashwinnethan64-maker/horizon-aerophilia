@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Backend API and deterministic simulation engine for Routeless: The Last Mile",
-  "main": "dist/api/server.js",
+  "main": "dist/backend/src/api/server.js",
   "scripts": {
     "dev": "tsx watch src/api/server.ts",
     "build": "tsc",
-    "start": "node dist/api/server.js",
+    "start": "node dist/backend/src/api/server.js",
     "test": "vitest run",
     "sim": "tsx src/engine/cli.ts",
     "optimize": "tsx src/engine/cli-opt.ts"
