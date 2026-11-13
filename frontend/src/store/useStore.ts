@@ -89,11 +89,27 @@ interface StoreState {
   executeWhatIf: (prompt: string) => Promise<string>;
 }
 
+const getInitialLanguage = (): 'en' | 'kn' => {
+  try {
+    const saved = window.localStorage.getItem('yg_language');
+    return saved === 'kn' ? 'kn' : 'en';
+  } catch {
+    return 'en';
+  }
+};
+
 export const useStore = create<StoreState>((set, get) => ({
   role: 'landing',
   setRole: (role) => set({ role }),
-  language: 'en',
-  setLanguage: (language) => set({ language }),
+  language: getInitialLanguage(),
+  setLanguage: (language) => {
+    try {
+      window.localStorage.setItem('yg_language', language);
+    } catch {
+      // Ignore storage errors
+    }
+    set({ language });
+  },
   activeOwnerTab: 'overview',
   setActiveOwnerTab: (activeOwnerTab) => set({ activeOwnerTab }),
 
@@ -115,7 +131,22 @@ export const useStore = create<StoreState>((set, get) => ({
   toggleMockMode: async () => {
     const nextMode = !get().isMockMode;
     api.setMockMode(nextMode);
-    set({ isMockMode: nextMode });
+    if (!nextMode) {
+      // Switching to Live API: verify backend health before committing LIVE API badge
+      try {
+        await api.getHealth();
+        set({ isMockMode: false, error: null });
+        await get().initialize();
+      } catch (err: any) {
+        api.setMockMode(true);
+        set({
+          isMockMode: true,
+          error: err?.message || 'Live API is unreachable; staying in Mock Mode.'
+        });
+      }
+      return;
+    }
+    set({ isMockMode: true, error: null });
     await get().initialize();
   },
 

@@ -1,9 +1,11 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
+import { translations } from '../i18n/translations';
 import { CloudRain, Wrench, ShieldAlert, Sparkles, Sun, Info } from 'lucide-react';
 
 export const ScenarioBar: React.FC = () => {
-  const { activeScenarioId, setActiveScenarioId, isLoading } = useStore();
+  const { activeScenarioId, setActiveScenarioId, isLoading, language } = useStore();
+  const t = translations[language].scenarios;
 
   const scenarios = [
     {
@@ -44,7 +46,7 @@ export const ScenarioBar: React.FC = () => {
     <div className="space-y-2">
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
         <span className="text-xs font-bold text-yg-textSecondary uppercase tracking-wider shrink-0 mr-1">
-          Scenarios:
+          {t.label}
         </span>
         {scenarios.map((sc) => {
           const Icon = sc.icon;

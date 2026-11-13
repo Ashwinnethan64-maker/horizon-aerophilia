@@ -10,23 +10,42 @@ import type {
 import { mockApi } from './mock.js';
 import { enrichNetworkCoordinates } from '../data/stopCoordinates.js';
 
-// Initial setting from env, but dynamically toggleable at runtime
 const ENV_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 let activeMockMode = ENV_MOCK;
 
+// Prefer same-origin /api (proxied by Vite in dev) unless an explicit remote URL is set
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  'http://localhost:3001/api';
+  '/api';
 
-async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${url}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers
+async function fetchWithRetry(url: string, options?: RequestInit, retries = 1): Promise<Response> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await fetch(url, {
+        ...options,
+        signal: options?.signal ?? AbortSignal.timeout(12_000),
+        headers: {
+          'Content-Type': 'application/json',
+          ...options?.headers
+        }
+      });
+    } catch (err) {
+      lastError = err;
+      if (attempt < retries) {
+        await new Promise((r) => setTimeout(r, 350));
+      }
     }
-  });
+  }
+  const msg = lastError instanceof Error ? lastError.message : 'Network error';
+  throw new Error(
+    `Backend API unreachable (${msg}). Ensure the backend server is running on port 3001, or switch to Mock Mode.`
+  );
+}
+
+async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
+  const res = await fetchWithRetry(`${API_BASE_URL}${path}`, options, 1);
 
   if (!res.ok) {
     const errorBody = await res.json().catch(() => ({}));

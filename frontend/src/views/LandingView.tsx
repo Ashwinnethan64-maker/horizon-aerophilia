@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
+import { translations } from '../i18n/translations';
 import {
   ArrowRight,
   Bus,
@@ -15,7 +16,8 @@ import {
 } from 'lucide-react';
 
 export const LandingView: React.FC = () => {
-  const { setRole, students, network } = useStore();
+  const { setRole, students, network, language } = useStore();
+  const t = translations[language].landing;
 
   const stopCount = network?.stops.length ?? 6;
   const routeCount = network?.routes.length ?? 2;
@@ -30,17 +32,17 @@ export const LandingView: React.FC = () => {
           <div className="lg:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-center space-y-6">
             <div className="inline-flex items-center gap-2 self-start bg-[#FFD93D] text-[#111111] border-2 border-[#111111] px-3 py-1 rounded-[4px] shadow-[3px_3px_0_0_#111111] -rotate-1 font-display text-xs font-bold uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-[#0866F5]" />
-              Demand-Driven Mobility
+              {t.badge}
             </div>
 
             <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[0.98] text-[#111111]">
-              Every Student.{' '}
-              <span className="text-[#0866F5]">Every Route.</span>{' '}
-              Connected.
+              {t.heroTitlePrefix}{' '}
+              <span className="text-[#0866F5]">{t.heroTitleHighlight}</span>{' '}
+              {t.heroTitleSuffix}
             </h1>
 
             <p className="text-base sm:text-lg text-[#454545] leading-relaxed max-w-xl">
-              See where students need transport, plan bus schedules around real demand, and make journeys more reliable across Mangaluru, Gurupura, Polali and surrounding communities.
+              {t.heroDesc}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-1">
@@ -50,7 +52,7 @@ export const LandingView: React.FC = () => {
                 className="nb-btn-primary px-6 py-3.5 text-sm sm:text-base"
               >
                 <LayoutDashboard className="w-4 h-4" />
-                Explore as Bus Owner
+                {t.ctaOwner}
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button
@@ -59,7 +61,7 @@ export const LandingView: React.FC = () => {
                 className="nb-btn-secondary px-6 py-3.5 text-sm sm:text-base"
               >
                 <GraduationCap className="w-4 h-4" />
-                Find My Bus
+                {t.ctaStudent}
               </button>
             </div>
 

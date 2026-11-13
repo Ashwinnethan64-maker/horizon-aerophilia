@@ -1,9 +1,11 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
+import { translations } from '../i18n/translations';
 import { Users, AlertTriangle, Clock, TrendingUp, Sparkles, HelpCircle } from 'lucide-react';
 
 export const ImpactPanel: React.FC = () => {
-  const { baselineResult, optimizedResult, viewingOptimized, scoreDelta, isLoading } = useStore();
+  const { baselineResult, optimizedResult, viewingOptimized, scoreDelta, isLoading, language } = useStore();
+  const t = translations[language].impact;
 
   const baseline = baselineResult?.metrics;
   const current = viewingOptimized && optimizedResult ? optimizedResult.metrics : baseline;
@@ -59,14 +61,14 @@ export const ImpactPanel: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <h2 className="font-display font-bold text-[#111111] text-base">
-              Performance &amp; Financial Viability Metrics
+              {t.title}
             </h2>
             <span className="text-[10px] uppercase font-display font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#EAF2FF] text-[#0866F5] border border-[#111111]">
-              Simulated
+              {t.simulated}
             </span>
           </div>
           <p className="text-xs text-[#454545] mt-0.5">
-            Holistic assessment of student accessibility, travel comfort, and carrier operating costs.
+            {t.subtitle}
           </p>
         </div>
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useStore, OwnerTab } from '../store/useStore';
+import { translations } from '../i18n/translations';
 import { SimMap } from '../components/SimMap';
 import { ImpactPanel } from '../components/ImpactPanel';
 import { DemandHeatmap } from '../components/DemandHeatmap';
@@ -57,8 +58,10 @@ export const OwnerView: React.FC = () => {
     setReplaySpeed,
     reportedIssues,
     selectedStopId,
-    setSelectedStopId
+    setSelectedStopId,
+    language
   } = useStore();
+  const t = translations[language].owner;
 
   const [whatIfText, setWhatIfText] = useState('');
   const [whatIfResponse, setWhatIfResponse] = useState<string | null>(null);
@@ -136,12 +139,12 @@ export const OwnerView: React.FC = () => {
   const currentMinute = bounds.minMinute + Math.min(replayTimeIndex, bounds.totalMinutes);
 
   const navTabs: { id: OwnerTab; label: string; icon: React.FC<{ className?: string }> }[] = [
-    { id: 'overview', label: 'Live Simulation & Map', icon: Activity },
-    { id: 'optimizer', label: 'Route Optimizer & What-If', icon: Sliders },
-    { id: 'demand', label: 'Demand Intelligence', icon: Activity },
-    { id: 'routes', label: 'Routes & Stops', icon: Navigation },
-    { id: 'fleet', label: 'Fleet & Constraints', icon: BusIcon },
-    { id: 'financial', label: 'Financial Insights', icon: DollarSign }
+    { id: 'overview', label: t.tabs.overview, icon: Activity },
+    { id: 'optimizer', label: t.tabs.optimizer, icon: Sliders },
+    { id: 'demand', label: t.tabs.demand, icon: Activity },
+    { id: 'routes', label: t.tabs.routes, icon: Navigation },
+    { id: 'fleet', label: t.tabs.fleet, icon: BusIcon },
+    { id: 'financial', label: t.tabs.financial, icon: DollarSign }
   ];
 
   const filteredStops = (network?.stops || []).filter(
@@ -168,7 +171,7 @@ export const OwnerView: React.FC = () => {
                   : 'text-[#454545] hover:text-[#111111]'
               }`}
             >
-              Baseline
+              {t.baseline}
             </button>
             <button
               type="button"
@@ -654,7 +657,7 @@ export const OwnerView: React.FC = () => {
           <div className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-yg-warning" />
             <h3 className="font-semibold text-yg-secondary text-sm">
-              Live Student Commute Reports &amp; Feedback
+              {t.reportsTitle}
             </h3>
           </div>
           <span className="text-[11px] text-yg-textSecondary font-medium">

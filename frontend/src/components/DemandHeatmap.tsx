@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { useStore } from '../store/useStore';
+import { translations } from '../i18n/translations';
 import type { Bus, Route } from '../../../contracts/types.js';
 import { BarChart2, AlertCircle } from 'lucide-react';
 
@@ -41,7 +42,8 @@ function estimateSeatsForStop(
 }
 
 export const DemandHeatmap: React.FC = () => {
-  const { network, students, currentSchedule, optimizedSchedule, activeScenarioId } = useStore();
+  const { network, students, currentSchedule, optimizedSchedule, activeScenarioId, language } = useStore();
+  const t = translations[language].heatmap;
   const [slot, setSlot] = useState<SlotFilter>('all');
 
   const data = useMemo(() => {
@@ -106,7 +108,7 @@ export const DemandHeatmap: React.FC = () => {
         <div className="flex items-center gap-2">
           <BarChart2 className="w-4 h-4 text-[#0866F5]" />
           <h3 className="font-display font-bold text-[#111111] text-sm">
-            Stop Demand vs. Available Seats
+            {t.title}
           </h3>
         </div>
 

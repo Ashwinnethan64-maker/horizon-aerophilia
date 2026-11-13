@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useStore } from './store/useStore';
+import { translations } from './i18n/translations';
 import { LandingView } from './views/LandingView';
 import { OwnerView } from './views/OwnerView';
 import { StudentView } from './views/StudentView';
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
   } = useStore();
   const [showTransparencyNotice, setShowTransparencyNotice] = useState(true);
   const [showAboutModal, setShowAboutModal] = useState(false);
+  const t = translations[language].app;
 
   useEffect(() => {
     initialize();
@@ -44,7 +46,7 @@ export const App: React.FC = () => {
           <div className="max-w-7xl mx-auto flex items-center gap-2 truncate">
             <span className="w-2 h-2 rounded-full bg-[#FFD93D] shrink-0" />
             <span className="truncate">
-              <strong>Data Transparency Notice:</strong> All vehicle replays and capacity metrics reflect deterministic timetable simulations. No real-time GPS telemetry is implied.
+              {t.transparencyNotice}
             </span>
           </div>
           <button
@@ -69,14 +71,13 @@ export const App: React.FC = () => {
               className="flex items-center gap-2.5 text-left group cursor-pointer"
               title="Return to YatraGrid Home"
             >
-              <div className="w-10 h-10 rounded-[4px] bg-[#0866F5] border-2 border-[#111111] shadow-[2px_2px_0_0_#111111] flex items-center justify-center text-white shrink-0 group-hover:bg-[#064DB8] transition-colors">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="5" cy="18" r="3" />
-                  <circle cx="19" cy="6" r="3" />
-                  <path d="M7.5 16.5L16.5 7.5" />
-                  <circle cx="12" cy="12" r="2" fill="currentColor" />
-                </svg>
-              </div>
+              <img
+                src="/yatragrid-logo.png"
+                alt="YatraGrid"
+                width={48}
+                height={40}
+                className="h-9 sm:h-10 w-auto object-contain shrink-0"
+              />
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-display font-bold text-[#111111] text-lg sm:text-xl tracking-tight leading-none">
@@ -87,7 +88,7 @@ export const App: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-[11px] text-[#454545] hidden md:block">
-                  Mangaluru–Gurupura–Polali Student Mobility
+                  {t.brandSubtitle}
                 </p>
               </div>
             </button>
@@ -110,12 +111,12 @@ export const App: React.FC = () => {
               {isMockMode ? (
                 <>
                   <WifiOff className="w-3 h-3" />
-                  Mock Mode
+                  {t.mockMode}
                 </>
               ) : (
                 <>
                   <Wifi className="w-3 h-3" />
-                  Live API
+                  {t.liveApi}
                 </>
               )}
             </button>
@@ -179,7 +180,7 @@ export const App: React.FC = () => {
                 title="Overview Landing Page"
               >
                 <Home className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Home</span>
+                <span className="hidden md:inline">{t.home}</span>
               </button>
               <button
                 type="button"
@@ -191,7 +192,7 @@ export const App: React.FC = () => {
                 }`}
               >
                 <LayoutDashboard className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Owner</span>
+                <span className="hidden sm:inline">{t.owner}</span>
               </button>
               <button
                 type="button"
@@ -203,7 +204,7 @@ export const App: React.FC = () => {
                 }`}
               >
                 <GraduationCap className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Student</span>
+                <span className="hidden sm:inline">{t.student}</span>
               </button>
             </div>
           </div>
@@ -239,11 +240,15 @@ export const App: React.FC = () => {
           <div className="bg-white rounded-[4px] shadow-[8px_8px_0_0_#111111] max-w-lg w-full p-6 border-2 border-[#111111] space-y-4">
             <div className="flex items-center justify-between pb-3 border-b-2 border-[#111111]">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-[4px] bg-[#0866F5] border-2 border-[#111111] text-white flex items-center justify-center font-display font-bold text-xs">
-                  YG
-                </div>
+                <img
+                  src="/yatragrid-logo.png"
+                  alt="YatraGrid"
+                  width={34}
+                  height={28}
+                  className="h-7 w-auto object-contain shrink-0"
+                />
                 <h3 className="font-display font-bold text-[#111111] text-base">
-                  About YatraGrid Platform
+                  {t.aboutTitle}
                 </h3>
               </div>
               <button
