@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -21,16 +21,6 @@ import {
   ROUTE_GEOMETRY
 } from '../data/operatingArea';
 import type { ReplaySnapshot } from './simReplay';
-import {
-  MapPin,
-  Bus as BusIcon,
-  Users,
-  AlertTriangle,
-  CheckCircle2,
-  Navigation,
-  Sparkles,
-  Info
-} from 'lucide-react';
 
 // Fix standard Leaflet default icon paths if needed
 delete (L.Icon.Default.prototype as any)._getIconUrl;

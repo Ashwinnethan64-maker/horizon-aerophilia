@@ -26,8 +26,8 @@ import {
 
 const WHAT_IF_PRESETS = [
   'Move Bus B3 from 12:00 to 07:45 AM peak rush',
-  'Shift Bus B1 10m earlier to relieve Kishanpur Junction',
-  'Add extra capacity for Neelam Valley morning commute'
+  'Shift Bus B1 10m earlier to relieve Kadri / Kulshekar Junction',
+  'Add extra capacity for Bondantila Village morning commute'
 ];
 
 export const OwnerView: React.FC = () => {
@@ -514,7 +514,7 @@ export const OwnerView: React.FC = () => {
 
             <input
               type="text"
-              placeholder="Search stop by name or ID (e.g. Kishanpur, S2)..."
+              placeholder="Search stop by name or ID (e.g. Gurupura, S3, Kadri)..."
               value={stopSearch}
               onChange={(e) => setStopSearch(e.target.value)}
               className="w-full text-xs px-3 py-2 border border-yg-border rounded-yg-btn focus:outline-none focus:ring-2 focus:ring-yg-primary"
@@ -542,7 +542,7 @@ export const OwnerView: React.FC = () => {
                         </span>
                       </div>
                       <div className="text-yg-textSecondary text-[11px] mt-0.5">
-                        {stop.id === 'S6' ? 'Govt Inter College Terminal' : `${homeCount} registered student homes`}
+                        {stop.id === 'S6' ? 'Polali High School Terminal' : `${homeCount} registered student homes`}
                       </div>
                     </div>
                     <span className="text-yg-primary font-bold text-xs">

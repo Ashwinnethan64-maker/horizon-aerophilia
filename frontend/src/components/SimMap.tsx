@@ -1,14 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { useStore } from '../store/useStore';
 import {
-  MapPin,
   Bus as BusIcon,
   Users,
   AlertTriangle,
   CheckCircle2,
   Clock,
   Layers,
-  RotateCcw,
   Info,
   X,
   Compass,
@@ -17,7 +15,6 @@ import {
 } from 'lucide-react';
 import { computeReplaySnapshot, getReplayBounds } from './simReplay';
 import { TransportMap, MapLayerToggles } from './TransportMap';
-import { GEOGRAPHIC_ANCHORS } from '../data/operatingArea';
 
 export const SimMap: React.FC = () => {
   const {
@@ -33,8 +30,7 @@ export const SimMap: React.FC = () => {
     selectedStopId,
     setSelectedStopId,
     selectedRouteId,
-    setSelectedRouteId,
-    language
+    setSelectedRouteId
   } = useStore();
 
   const [showLegend, setShowLegend] = useState(true);

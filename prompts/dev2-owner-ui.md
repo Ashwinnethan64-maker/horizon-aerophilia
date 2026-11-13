@@ -39,3 +39,21 @@ Owner: Track B
   - Completely redesigned `frontend/src/views/StudentView.tsx` as a mobile-first journey companion with language toggle (English / ಕನ್ನಡ), next morning journey card with crowding indicator and fallback callout, step-by-step commute registration, regional route browser, and delay/disruption incident reporting form.
   - Updated `frontend/src/App.tsx` with YatraGrid transit wordmark, data transparency banner (distinguishing scheduled/simulated timeline from live GPS), about architecture modal, and responsive sticky header.
 - **Issues / Debugging:** TypeScript caught unused icon imports and a missing store parameter `optimizedSchedule` in `OwnerView.tsx`. Cleaned up imports and variables, successfully built with `npm --prefix frontend run build` (`tsc && vite build`).
+
+### [2026-11-13 13:21] Prompt #4 — Leaflet Geographic Map & Full Mangaluru–Polali Overhaul
+- **User Prompt:** `# YATRAGRID — EXECUTE FULL MAP & UI IMPLEMENTATION NOW ... Priority 1: Interactive Leaflet Map (Mangaluru–Gurupura–Polali + 5 km buffer), Priority 2: Complete UI/UX Redesign, Priority 3: Functional Integration.`
+- **Context / Goal:** Implement real interactive Leaflet + OpenStreetMap map replacing the schematic SVG grid with the Mangaluru–Gurupura–Polali transit corridor and proposed 5 km outward study buffer. Integrate real road geometry, stop markers, demand intensity halos, and deterministic simulated moving bus markers with timetable progression. Update all stop names and coordinates to the real operating corridor.
+- **Action Taken / Result:**
+  - Installed `leaflet`, `react-leaflet@^4.2.1`, and `@types/leaflet`.
+  - Added optional `lat?: number; lng?: number; kannadaName?: string;` to `Stop` contract in `contracts/types.ts`.
+  - Created `frontend/src/data/operatingArea.ts` with real coordinates for the corridor:
+    - Anchors: Mangaluru City (`12.8717, 74.8425`), Gurupura Locality (`12.9383, 74.9280`), Polali Temple (`12.9340, 74.9553`).
+    - Real stops: S1 State Bank, S2 Kadri/Kulshekar, S3 Gurupura Junction, S4 Bondantila Village, S5 Addoor Bridge Crossing, S6 Polali High School & Terminal.
+    - Road polylines for R1 (Mangaluru–Gurupura–Polali Trunk) and R2 (Bondantila–Polali Feeder).
+    - Core operating area polygon and 5 km study buffer GeoJSON.
+  - Implemented `frontend/src/components/TransportMap.tsx` with OpenStreetMap tile layer, attribution, layer toggles, road polylines, demand halos, anchor pins, stop markers, and moving bus markers with load bars.
+  - Updated `frontend/src/components/SimMap.tsx` with 8 independent layer toggles, live counters, interactive legend, and stop/route inspection.
+  - Updated `frontend/src/views/StudentView.tsx` with real corridor stops, localized Kannada labels, and an embedded student Leaflet corridor map.
+  - Verified `contracts/fixtures/network.json` and `frontend/src/api/mock.ts` with real corridor stops and scenario descriptions.
+  - Ran `npm --prefix frontend run build` (0 errors) and `npm --prefix backend test` (100% passed).
+- **Issues / Debugging:** Handled React 18 peer dependency conflict with `react-leaflet@5.0.0` by pinning to `react-leaflet@^4.2.1`. Cleaned up unused imports across `SimMap.tsx` and `TransportMap.tsx`.

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useStore } from '../store/useStore';
 import {
   Bus,
@@ -12,11 +12,23 @@ import {
   Bell,
   HelpCircle
 } from 'lucide-react';
+import { TransportMap, MapLayerToggles } from '../components/TransportMap';
+import { computeReplaySnapshot, getReplayBounds } from '../components/simReplay';
 
 type StudentTab = 'my_bus' | 'register' | 'routes' | 'alerts';
 
 export const StudentView: React.FC = () => {
-  const { network, students, registerStudent, reportIssue, isLoading, language } = useStore();
+  const {
+    network,
+    students,
+    registerStudent,
+    reportIssue,
+    isLoading,
+    language,
+    baselineResult,
+    currentSchedule,
+    replayTimeIndex
+  } = useStore();
 
   const [activeTab, setActiveTab] = useState<StudentTab>('my_bus');
   const [name, setName] = useState('');
@@ -33,6 +45,27 @@ export const StudentView: React.FC = () => {
 
   const stops = network?.stops || [];
   const routes = network?.routes || [];
+
+  const events = baselineResult?.events ?? [];
+  const bounds = useMemo(() => getReplayBounds(events), [events]);
+  const currentMinute = bounds.minMinute + Math.min(replayTimeIndex, bounds.totalMinutes);
+
+  const snapshot = useMemo(
+    () => computeReplaySnapshot(network, students, events, currentSchedule, currentMinute),
+    [network, students, events, currentSchedule, currentMinute]
+  );
+
+  // Student-specific simplified map layers (no confidential financials or raw demand layers)
+  const studentMapLayers: MapLayerToggles = {
+    baseMap: true,
+    coreArea: true,
+    studyBuffer: false,
+    routes: true,
+    stops: true,
+    buses: true,
+    demandIntensity: false,
+    anchors: true
+  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,22 +109,22 @@ export const StudentView: React.FC = () => {
   const t = {
     en: {
       portalTitle: 'Student Commute Companion',
-      portalSubtitle: 'Understand scheduled departures, find your boarding stop, and express your daily travel demand to school.',
+      portalSubtitle: 'Mangaluru–Gurupura–Polali Corridor: find scheduled departures, see boarding points, and register your school travel demand.',
       myBusTab: 'My Morning Bus',
       registerTab: 'Register Need',
-      routesTab: 'Routes & Stops',
+      routesTab: 'Corridor Map & Routes',
       alertsTab: 'Service Alerts',
       scheduledTag: 'Scheduled Service • Not Live GPS',
       nextTripHeader: 'Your Next Morning Journey',
       boardingStop: 'Boarding Point',
-      destination: 'Terminal Institution',
+      destination: 'Terminal High School',
       estArrival: 'Scheduled Arrival',
       departs: 'Departs Stop',
       highCrowd: 'High Peak Crowding',
       fallbackNotice: 'Alternative Morning Run Available',
-      fallbackDesc: 'Bus B3 has been provisioned at 07:45 AM in the updated plan for S2 / S3 students to alleviate capacity pressure.',
+      fallbackDesc: 'Bus B3 has been provisioned at 07:45 AM in the updated plan for S2 (Kadri) & S3 (Gurupura) students to alleviate morning rush.',
       registerTitle: 'Express Your Daily Travel Need',
-      registerDesc: 'Registering helps local operators align bus capacity with actual student morning commute times.',
+      registerDesc: 'Registering helps local bus operators align seat capacity with student morning travel times to Polali High School.',
       fullName: 'Student Name',
       villageStop: 'Home Village / Nearest Boarding Stop',
       arriveDeadline: 'Target School Arrival Deadline',
@@ -99,25 +132,25 @@ export const StudentView: React.FC = () => {
       saveNeed: 'Submit Travel Requirement',
       regSuccess: 'Commute need recorded! This updates the regional schedule optimizer and demand heatmap.',
       reportTitle: 'Report a Service Issue',
-      reportDesc: 'Help the operator improve service by reporting delays, full buses, or cancellations. Marked as student-reported until verified.',
+      reportDesc: 'Help operators improve service by reporting delays, full buses, or cancellations. Marked as student-reported until verified.',
       reportBtn: 'Submit Incident Notice'
     },
     kn: {
       portalTitle: 'ವಿದ್ಯಾರ್ಥಿ ಪ್ರಯಾಣ ಸಹಾಯಕ',
-      portalSubtitle: 'ಬಸ್ ನಿರ್ಗಮನ ಸಮಯ, ಹತ್ತುವ ನಿಲ್ದಾಣ ಮತ್ತು ನಿಮ್ಮ ಶಾಲಾ ಪ್ರಯಾಣದ ಅಗತ್ಯಗಳನ್ನು ತಿಳಿಸಿ.',
+      portalSubtitle: 'ಮಂಗಳೂರು–ಗುರುಪುರ–ಪೊಳಲಿ ಮಾರ್ಗ: ಬಸ್ ನಿರ್ಗಮನ ಸಮಯ, ಹತ್ತುವ ನಿಲ್ದಾಣ ಮತ್ತು ನಿಮ್ಮ ಶಾಲಾ ಪ್ರಯಾಣದ ಅಗತ್ಯಗಳನ್ನು ತಿಳಿಸಿ.',
       myBusTab: 'ನನ್ನ ಬಸ್',
       registerTab: 'ಅಗತ್ಯ ದಾಖಲಿಸಿ',
-      routesTab: 'ಮಾರ್ಗಗಳು',
+      routesTab: 'ಮಾರ್ಗ ನಕ್ಷೆ',
       alertsTab: 'ಸೂಚನೆಗಳು',
       scheduledTag: 'ನಿಗದಿತ ವೇಳಾಪಟ್ಟಿ • ಲೈವ್ GPS ಅಲ್ಲ',
       nextTripHeader: 'ನಿಮ್ಮ ಮುಂದಿನ ಶಾಲಾ ಪ್ರಯಾಣ',
       boardingStop: 'ಹತ್ತುವ ನಿಲ್ದಾಣ',
-      destination: 'ಶಾಲೆ / ಕಾಲೇಜು',
+      destination: 'ಪೊಳಲಿ ಪ್ರೌಢಶಾಲೆ',
       estArrival: 'ಆಗಮನ ಸಮಯ',
       departs: 'ಹೊರಡುವ ಸಮಯ',
       highCrowd: 'ಹೆಚ್ಚಿನ ಜನದಟ್ಟಣೆ',
       fallbackNotice: 'ಪರ್ಯಾಯ ಮುಂಜಾನೆ ಬಸ್ ಲಭ್ಯವಿದೆ',
-      fallbackDesc: 'S2 / S3 ನಿಲ್ದಾಣದ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಬೆಳಗ್ಗೆ 07:45 ಕ್ಕೆ ಬಸ್ B3 ವ್ಯವಸ್ಥೆ ಮಾಡಲಾಗಿದೆ.',
+      fallbackDesc: 'ಕದ್ರಿ ಮತ್ತು ಗುರುಪುರ ನಿಲ್ದಾಣದ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಬೆಳಗ್ಗೆ 07:45 ಕ್ಕೆ ಬಸ್ B3 ವ್ಯವಸ್ಥೆ ಮಾಡಲಾಗಿದೆ.',
       registerTitle: 'ನಿಮ್ಮ ದೈನಂದಿನ ಪ್ರಯಾಣದ ಅಗತ್ಯ ದಾಖಲಿಸಿ',
       registerDesc: 'ದಾಖಲಾತಿಗಳು ಬಸ್ ಮಾಲೀಕರಿಗೆ ಸೂಕ್ತ ವೇಳಾಪಟ್ಟಿ ಸಿದ್ಧಪಡಿಸಲು ನೆರವಾಗುತ್ತವೆ.',
       fullName: 'ವಿದ್ಯಾರ್ಥಿಯ ಹೆಸರು',
@@ -148,7 +181,6 @@ export const StudentView: React.FC = () => {
             {t.portalSubtitle}
           </p>
         </div>
-        {/* Soft decorative badge in corner */}
         <div className="absolute right-4 bottom-4 text-slate-700/30 hidden sm:block">
           <Bus className="w-24 h-24 stroke-1" />
         </div>
@@ -231,7 +263,7 @@ export const StudentView: React.FC = () => {
               <div className="p-4 bg-yg-surfaceSubtle rounded-xl border border-yg-border space-y-1">
                 <span className="text-xs text-yg-textSecondary font-medium">{t.boardingStop}</span>
                 <div className="text-base font-bold text-yg-secondary">
-                  Bari Village (Stop S1)
+                  Mangaluru State Bank (Stop S1)
                 </div>
                 <div className="text-xs font-semibold text-yg-primary flex items-center gap-1 pt-1">
                   <Clock className="w-3.5 h-3.5" />
@@ -242,7 +274,7 @@ export const StudentView: React.FC = () => {
               <div className="p-4 bg-yg-surfaceSubtle rounded-xl border border-yg-border space-y-1">
                 <span className="text-xs text-yg-textSecondary font-medium">{t.destination}</span>
                 <div className="text-base font-bold text-yg-secondary">
-                  Govt Inter College &amp; High School (S6)
+                  Polali Govt Inter College &amp; High School (S6)
                 </div>
                 <div className="text-xs font-semibold text-yg-secondary flex items-center gap-1 pt-1">
                   <Clock className="w-3.5 h-3.5" />
@@ -258,8 +290,8 @@ export const StudentView: React.FC = () => {
                   Bus B1
                 </div>
                 <div>
-                  <div className="font-bold text-yg-secondary text-sm">Northern Trunk Corridor</div>
-                  <div className="text-yg-textSecondary">Seats Capacity: 35 &bull; Fare: ₹25</div>
+                  <div className="font-bold text-yg-secondary text-sm">Mangaluru–Gurupura–Polali Trunk (R1)</div>
+                  <div className="text-yg-textSecondary">Seats Capacity: 35 &bull; Nominal Fare: ₹25</div>
                 </div>
               </div>
               <button
@@ -267,7 +299,7 @@ export const StudentView: React.FC = () => {
                 onClick={() => setActiveTab('routes')}
                 className="text-xs font-bold text-yg-primary hover:underline flex items-center gap-1"
               >
-                View Full Route Stops <ArrowRight className="w-3 h-3" />
+                View Corridor Map <ArrowRight className="w-3 h-3" />
               </button>
             </div>
 
@@ -284,7 +316,7 @@ export const StudentView: React.FC = () => {
           {/* Quick Registration Card CTA */}
           <div className="p-4 bg-white rounded-yg-card border border-yg-border flex items-center justify-between text-xs shadow-xs">
             <div>
-              <strong className="text-yg-secondary text-sm block">Need a different pickup point or time?</strong>
+              <strong className="text-yg-secondary text-sm block">Need a different boarding stop or arrival time?</strong>
               <span className="text-yg-textSecondary">
                 {students.length} students have currently registered commute needs.
               </span>
@@ -335,7 +367,7 @@ export const StudentView: React.FC = () => {
                   .filter((s) => s.id !== 'S6')
                   .map((stop) => (
                     <option key={stop.id} value={stop.id}>
-                      {stop.name} ({stop.id})
+                      {stop.name} ({stop.id}) {stop.kannadaName ? `— ${stop.kannadaName}` : ''}
                     </option>
                   ))}
               </select>
@@ -348,7 +380,7 @@ export const StudentView: React.FC = () => {
               <input
                 type="text"
                 disabled
-                value="Govt Inter College & High School (Terminal S6)"
+                value="Polali Govt Inter College & High School (Terminal S6)"
                 className="w-full text-xs sm:text-sm px-3.5 py-2.5 bg-yg-surfaceSubtle border border-yg-border rounded-yg-btn text-yg-textSecondary cursor-not-allowed font-medium"
               />
             </div>
@@ -408,11 +440,26 @@ export const StudentView: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 3: ROUTES & STOPS DIRECTORY */}
+      {/* TAB 3: ROUTES & STOPS DIRECTORY + LEAFLET MAP */}
       {activeTab === 'routes' && (
         <div className="space-y-5">
+          {/* Real Leaflet Map for Student View */}
+          <div className="bg-white rounded-yg-card shadow-yg-card border border-yg-border p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-yg-secondary text-base">
+                Interactive Mangaluru–Gurupura–Polali Map
+              </h3>
+              <span className="text-[10px] bg-yg-secondarySoft text-yg-secondary px-2 py-0.5 rounded-full font-bold">
+                Student View
+              </span>
+            </div>
+            <div className="w-full h-72 sm:h-96 rounded-lg overflow-hidden border border-yg-border">
+              <TransportMap snapshot={snapshot} layers={studentMapLayers} />
+            </div>
+          </div>
+
           <div className="bg-white rounded-yg-card shadow-yg-card border border-yg-border p-6 space-y-4">
-            <h3 className="font-bold text-yg-secondary text-base">Regional Bus Routes</h3>
+            <h3 className="font-bold text-yg-secondary text-base">Corridor Bus Routes &amp; Stops</h3>
 
             <div className="space-y-4">
               {routes.map((route) => {
@@ -474,10 +521,10 @@ export const StudentView: React.FC = () => {
               <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
                 <div className="font-bold flex items-center gap-1.5 text-amber-800">
                   <AlertTriangle className="w-4 h-4 text-yg-warning" />
-                  <span>Kishanpur Junction Peak Crowding Warning</span>
+                  <span>Kadri / Kulshekar (Stop S2) Peak Crowding Warning</span>
                 </div>
                 <p>
-                  Bus B1 reaches capacity at Stop S2. If boarding here, please consider the optimized 07:45 AM B3 trip.
+                  Bus B1 reaches capacity at Kadri Junction. If boarding here, please consider the optimized 07:45 AM B3 trip.
                 </p>
                 <span className="text-[10px] text-amber-700">Official Operator Notice &bull; Valid today</span>
               </div>
@@ -485,7 +532,7 @@ export const StudentView: React.FC = () => {
               <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 space-y-1">
                 <div className="font-bold flex items-center gap-1.5 text-blue-800">
                   <HelpCircle className="w-4 h-4 text-blue-600" />
-                  <span>Chandan Bridge Maintenance Check</span>
+                  <span>Addoor River Bridge Maintenance Check</span>
                 </div>
                 <p>
                   Route R2 runs as scheduled under normal conditions; monitor status if rainfall increases.
