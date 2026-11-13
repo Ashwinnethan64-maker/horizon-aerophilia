@@ -5,7 +5,12 @@ import { z } from 'zod';
 import type { Network, Student, TransportDataset, SimResult, OptimizedScheduleSeed } from '../../../contracts/types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const fixturesDir = path.resolve(__dirname, '../../../contracts/fixtures');
+const fixturesDir =
+  [
+    path.resolve(__dirname, '../../../contracts/fixtures'),
+    path.resolve(__dirname, '../../../../../contracts/fixtures'),
+  ].find((dir) => fs.existsSync(dir)) ??
+  path.resolve(__dirname, '../../../contracts/fixtures');
 
 const positiveInt = z.number().int().positive();
 const nonNegativeInt = z.number().int().nonnegative();
