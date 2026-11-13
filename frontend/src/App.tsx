@@ -2,16 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from './store/useStore';
 import { OwnerView } from './views/OwnerView';
 import { StudentView } from './views/StudentView';
-import { api } from './api/client';
 import {
   GraduationCap,
   LayoutDashboard,
   Info,
-  X
+  X,
+  Wifi,
+  WifiOff
 } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const { role, setRole, language, setLanguage, initialize, error, activeScenarioId } = useStore();
+  const {
+    role,
+    setRole,
+    language,
+    setLanguage,
+    initialize,
+    error,
+    activeScenarioId,
+    isMockMode,
+    toggleMockMode,
+    isLoading
+  } = useStore();
   const [showTransparencyNotice, setShowTransparencyNotice] = useState(true);
   const [showAboutModal, setShowAboutModal] = useState(false);
 
@@ -46,11 +58,10 @@ export const App: React.FC = () => {
 
       {/* Main Navigation Header */}
       <header className="bg-white border-b border-yg-border sticky top-0 z-40 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-17 flex items-center justify-between gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-16 py-2 flex flex-wrap items-center justify-between gap-3">
           {/* Logo & Brand Identity */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-yg-primary flex items-center justify-center text-white shadow-xs">
-              {/* Connected node / transit route mark */}
+            <div className="w-10 h-10 rounded-xl bg-yg-primary flex items-center justify-center text-white shadow-xs shrink-0">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="5" cy="18" r="3" />
                 <circle cx="19" cy="6" r="3" />
@@ -59,18 +70,41 @@ export const App: React.FC = () => {
               </svg>
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-extrabold text-yg-secondary text-lg sm:text-xl tracking-tight leading-none">
                   YatraGrid
                 </span>
                 <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-yg-primarySoft text-yg-primary border border-yg-primary/20 hidden sm:inline-block">
                   Student Mobility
                 </span>
-                {api.isMock && (
-                  <span className="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border border-amber-200">
-                    Mock Mode
-                  </span>
-                )}
+
+                {/* Interactive Mock Mode / Live API Toggle Pill */}
+                <button
+                  type="button"
+                  onClick={() => toggleMockMode()}
+                  title={
+                    isMockMode
+                      ? 'Using local fixture mock data. Click to connect to live Express API.'
+                      : 'Connected to live Express API. Click to switch to local mock fixtures.'
+                  }
+                  className={`flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider transition-colors border cursor-pointer ${
+                    isMockMode
+                      ? 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
+                      : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                  }`}
+                >
+                  {isMockMode ? (
+                    <>
+                      <WifiOff className="w-3 h-3 text-amber-600" />
+                      Mock Mode
+                    </>
+                  ) : (
+                    <>
+                      <Wifi className="w-3 h-3 text-emerald-600" />
+                      Live API
+                    </>
+                  )}
+                </button>
               </div>
               <p className="text-[11px] text-yg-textSecondary hidden md:block">
                 Connecting student demand with practical bus operations and schedule optimization
@@ -78,8 +112,14 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Header Controls: Language + About + Role Switcher */}
+          {/* Right Header Controls: Sync state + Language + About + Role Switcher */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {isLoading && (
+              <span className="text-[11px] font-medium text-yg-textSecondary animate-pulse hidden lg:inline">
+                Synchronizing...
+              </span>
+            )}
+
             {/* Language Selector */}
             <div className="flex items-center bg-yg-surfaceSubtle rounded-lg p-0.5 border border-yg-border text-xs font-semibold">
               <button
@@ -121,7 +161,7 @@ export const App: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setRole('owner')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
                   role === 'owner'
                     ? 'bg-yg-secondary text-white shadow-xs'
                     : 'text-yg-textSecondary hover:text-yg-secondary'
@@ -133,7 +173,7 @@ export const App: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setRole('student')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
                   role === 'student'
                     ? 'bg-yg-primary text-white shadow-xs'
                     : 'text-yg-textSecondary hover:text-yg-secondary'
@@ -150,12 +190,15 @@ export const App: React.FC = () => {
       {/* Main View Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 text-yg-danger text-xs sm:text-sm rounded-yg-card flex items-center justify-between">
-            <span>{error}</span>
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 text-yg-danger text-xs sm:text-sm rounded-yg-card flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="font-bold">Notice:</span>
+              <span>{error}</span>
+            </div>
             <button
               type="button"
               onClick={() => initialize()}
-              className="text-xs font-bold underline text-yg-danger hover:text-red-900"
+              className="text-xs font-bold underline text-yg-danger hover:text-red-900 shrink-0 cursor-pointer"
             >
               Retry
             </button>
@@ -224,7 +267,9 @@ export const App: React.FC = () => {
             <strong className="text-yg-secondary">YatraGrid</strong> &bull; Intelligent Student Mobility Platform
           </div>
           <div className="flex items-center gap-4 text-[11px]">
-            <span>Active Scenario: <strong className="text-yg-secondary capitalize">{activeScenarioId.replace('_', ' ')}</strong></span>
+            <span>
+              Active Scenario: <strong className="text-yg-secondary capitalize">{activeScenarioId.replace(/_/g, ' ')}</strong>
+            </span>
             <span>&bull;</span>
             <span>Deterministic TS Engine</span>
           </div>

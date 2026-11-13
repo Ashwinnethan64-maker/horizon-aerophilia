@@ -25,9 +25,9 @@ import {
 } from 'lucide-react';
 
 const WHAT_IF_PRESETS = [
-  'Move Bus B3 from 12:00 to 07:45 AM peak rush',
-  'Shift Bus B1 10m earlier to relieve Kadri / Kulshekar Junction',
-  'Add extra capacity for Bondantila Village morning commute'
+  'Move Bus 3 departure to 07:45 AM',
+  'Increase capacity of Bus 1 to 50 seats',
+  'Simulate severe monsoon rain'
 ];
 
 export const OwnerView: React.FC = () => {
@@ -618,27 +618,27 @@ export const OwnerView: React.FC = () => {
             <div className="bg-white rounded-yg-card shadow-yg-card border border-yg-border p-5 space-y-2">
               <div className="text-xs text-yg-textSecondary font-semibold">Cost Per Student Served</div>
               <div className="text-2xl font-bold text-yg-secondary tabular-nums">
-                ₹{((activeResult?.metrics.cost ?? 1950) / Math.max(1, activeResult?.metrics.servedOnTime ?? 65)).toFixed(1)}
+                ₹{((activeResult?.metrics.cost ?? 0) / Math.max(1, activeResult?.metrics.servedOnTime ?? 1)).toFixed(1)}
               </div>
               <p className="text-[11px] text-yg-textSecondary">
-                Normalized trip expenditure per reached student at Govt Inter College.
+                Normalized trip expenditure per reached student at terminal schools.
               </p>
             </div>
 
             <div className="bg-white rounded-yg-card shadow-yg-card border border-yg-border p-5 space-y-2">
               <div className="text-xs text-yg-textSecondary font-semibold">Estimated Daily Revenue</div>
               <div className="text-2xl font-bold text-yg-primary tabular-nums">
-                ₹{activeResult?.metrics.revenue ?? 1625}
+                ₹{activeResult?.metrics.revenue ?? 0}
               </div>
               <p className="text-[11px] text-yg-textSecondary">
-                Calculated at nominal fare of ₹25 per completed student journey.
+                Calculated at nominal fare of ₹{network?.economics?.averageFare ?? 25} per completed student journey.
               </p>
             </div>
 
             <div className="bg-white rounded-yg-card shadow-yg-card border border-yg-border p-5 space-y-2">
               <div className="text-xs text-yg-textSecondary font-semibold">Viability Gap Assessment</div>
               <div className="text-2xl font-bold text-yg-warning tabular-nums">
-                ₹{activeResult?.metrics.viabilityGap ?? 325}
+                ₹{activeResult?.metrics.viabilityGap ?? 0}
               </div>
               <p className="text-[11px] text-yg-textSecondary">
                 Deficit requiring educational voucher subsidy or peak-rush schedule consolidation.

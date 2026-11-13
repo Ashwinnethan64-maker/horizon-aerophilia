@@ -50,52 +50,52 @@ Do this together, because everything after depends on it.
 
 ### A1. Foundations (0:20 to 0:45)
 
-- [ ] `rng.ts`: seeded random number generator (same seed, same sequence)
-- [ ] Time helpers: parse `"HH:MM"` to minutes and back
-- [ ] Load fixtures and validate them against the types
+- [x] `rng.ts`: seeded random number generator (same seed, same sequence)
+- [x] Time helpers: parse `"HH:MM"` to minutes and back with strict 24-hour validation
+- [x] Load fixtures and validate them against the types and cross-reference invariants
 
 ### A2. Simulator (0:45 to 1:15)
 
-- [ ] 1-minute tick loop from about 06:00 to 10:00
-- [ ] Student arrival at stops from the demand data
-- [ ] Bus movement along route stops using `travelMinutes`
-- [ ] Boarding up to capacity; leftovers wait for the next bus or become stranded
-- [ ] Event timeline output (`board`, `strand`, `arrive`, `bus_position`) matching `sample-simresult.json`
-- [ ] Metrics: served on time, stranded, average wait, load factor, revenue, cost, viability gap
-- [ ] Headless mode (skips event recording, for speed)
-- [ ] `npm run sim` CLI that prints baseline metrics
+- [x] 1-minute tick loop from 06:00 to 10:00
+- [x] Seeded student arrivals at stops from demand records
+- [x] Bus movement along route stops using `travelMinutes`
+- [x] Boarding up to capacity; leftovers wait for later trips or become stranded
+- [x] Event timeline output (`board`, `strand`, `arrive`, `bus_position`) matching `sample-simresult.json`
+- [x] Metrics: served on time, stranded, average wait, load factor, revenue, cost, viability gap
+- [x] Headless mode skips event recording while preserving metrics
+- [x] `npm run sim` CLI prints baseline metrics
 
 **Milestone A-1 (about 1:15):** `simulate()` returns a valid `SimResult`. Hand it to Dev 3 to wire into `/api/simulate`.
 
 ### A3. Scorer and scenarios (1:15 to 1:40)
 
-- [ ] `scorer.ts` using `W1..W4` from `Weights`
-- [ ] `scenarios.ts`: patch types (`demandMultiplier`, `capacityMultiplier`, `travelTimeMultiplier`, `removeBus`, `closeRoute`)
-- [ ] Preset scenarios: exam surge, rain, breakdown, route closure
+- [x] `scorer.ts` uses all four `Weights` terms and validates metric and weight inputs
+- [x] `scenarios.ts` applies `demandMultiplier`, `capacityMultiplier`, `travelTimeMultiplier`, `removeBus`, `closeRoute`, and `shiftDeparture` patches
+- [x] Preset scenarios: exam surge, rain, breakdown, route closure
 
 ### A4. Optimizer (1:40 to 2:15)
 
-- [ ] Random-restart hill climbing over departure offsets and bus-to-route assignment
-- [ ] Respect constraints: capacity, driver hours, permitted routes
-- [ ] Cap runtime (about 1 to 2 seconds) or a fixed iteration count
-- [ ] Output: new schedule, diff against old, before and after `SimResult`
-- [ ] Precompute and save a good default schedule as a fallback
-- [ ] CLI: `npm run optimize` prints baseline vs optimized
+- [x] Seeded random-restart hill climbing over departure offsets and bus-to-route assignment
+- [x] Respect constraints: vehicle capacity, driver hours, and optional permitted routes
+- [x] Cap the search at a fixed number of candidate evaluations
+- [x] Output: new schedule, route/departure diff, and before/after `SimResult`
+- [x] Precompute the POLALI-001 default schedule in `optimized-schedule.json` as a fallback
+- [x] CLI: `npm run optimize` prints baseline vs optimized
 
 **Milestone A-2 (about 2:00):** `optimize()` is exported and beats baseline on the fixture network.
 
 ### A5. Tests and hardening (2:15 to 2:30)
 
-- [ ] Same seed gives identical `SimResult`
-- [ ] Boarded count never exceeds capacity
-- [ ] Optimized score is at least baseline score on the fixtures
-- [ ] Each scenario patch changes the result in the expected direction
-- [ ] Handle empty demand and a closed route without crashing
+- [x] Same seed gives identical `SimResult`
+- [x] Boarded count never exceeds capacity
+- [x] Optimized score is at least baseline score on the fixtures
+- [x] Each scenario patch changes the result in the expected direction
+- [x] Handle empty demand and a closed route without crashing
 
 ### A6. Support (2:30 onward)
 
-- [ ] Help debug integration issues and tune optimizer weights for a good demo
-- [ ] If done early, take the LLM what-if service from Track C (see Handoffs)
+- [x] Debug engine/API integration and tune optimizer weights for the demo
+- [x] Complete the LLM what-if service handoff from Track C
 
 ### Track A: definition of done
 
@@ -170,67 +170,67 @@ Do this together, because everything after depends on it.
 
 ### C1. Contract and fixtures (0:00 to 0:20, with everyone)
 
-- [ ] `types.ts`, `api.md`, `network.json`, `students.json` (see Phase 0)
-- [ ] Make the fixtures realistic: a crowded 07:30 run, a near-empty midday run, and a stop with too little capacity, so the optimizer has a visible win
+- [x] `types.ts`, `api.md`, `network.json`, `students.json` (see Phase 0)
+- [x] Make the fixtures realistic: a crowded 07:30 run, a near-empty midday run, and a stop with too little capacity, so the optimizer has a visible win
 
 ### C2. Backend skeleton and first deploy (0:20 to 0:50)
 
-- [ ] Express server, CORS, health endpoint (`/api/health`)
-- [ ] In-memory store seeded from fixtures
-- [ ] Endpoints returning stub data: `/api/network`, `/api/students`, `/api/simulate`, `/api/optimize`, `/api/scenarios`
-- [ ] Zod validation on request bodies
-- [ ] **Deploy backend (Render or Railway) and frontend (Vercel or Netlify)**; confirm they connect
+- [x] Express server, CORS, health endpoint (`/api/health`)
+- [x] In-memory store seeded from fixtures
+- [x] Endpoints returning stub data: `/api/network`, `/api/students`, `/api/simulate`, `/api/optimize`, `/api/scenarios`
+- [x] Zod validation on request bodies
+- [x] **Deploy backend (Render or Railway) and frontend (Vercel or Netlify)**; confirm they connect
 
-**Milestone C-1 (about 0:50):** deployed frontend can call the deployed stub backend.
+**Milestone C-1 (about 0:50):** deployed frontend can call the deployed stub backend. (Completed)
 
 ### C3. Frontend foundation (0:50 to 1:15)
 
-- [ ] `api/client.ts`: typed functions for every endpoint
-- [ ] `api/mock.ts`: mock mode toggled by `VITE_USE_MOCK`
-- [ ] Zustand store with the slices from `ARCHITECTURE.md`
-- [ ] App shell with the Owner/Student role toggle (renders Track B's `OwnerView` when ready)
+- [x] `api/client.ts`: typed functions for every endpoint
+- [x] `api/mock.ts`: mock mode toggled by `VITE_USE_MOCK`
+- [x] Zustand store with the slices from `ARCHITECTURE.md`
+- [x] App shell with the Owner/Student role toggle (renders Track B's `OwnerView` when ready)
 
 ### C4. Integration (1:15 to 1:30)
 
-- [ ] Swap the stub for Track A's real `simulate()` and `optimize()`
-- [ ] Verify the real output matches `SimResult`; report any mismatch to Dev 1 right away
-- [ ] Flip the frontend from mock to the real API and confirm Track B's UI still works
+- [x] Swap the stub for Track A's real `simulate()` and `optimize()`
+- [x] Verify the real output matches `SimResult`; report any mismatch to Dev 1 right away
+- [x] Flip the frontend from mock to the real API and confirm Track B's UI still works
 
-**Milestone C-2 (about 1:30):** the deployed app runs real simulations.
+**Milestone C-2 (about 1:30):** the deployed app runs real simulations. (Completed)
 
 ### C5. Student view (1:30 to 2:00)
 
-- [ ] Registration form: home stop, institution, arrival deadline, days
-- [ ] `POST /api/students` adds demand; trigger a re-simulation
-- [ ] "My bus" card: bus, departure time, stop, typical crowding
-- [ ] Unserved notice with a fallback (nearest served stop)
-- [ ] Large buttons, few fields, simple language
+- [x] Registration form: home stop, institution, arrival deadline, days
+- [x] `POST /api/students` adds demand; trigger a re-simulation
+- [x] "My bus" card: bus, departure time, stop, typical crowding
+- [x] Unserved notice with a fallback (nearest served stop)
+- [x] Large buttons, few fields, simple language
 
 ### C6. LLM what-if service (2:00 to 2:25)
 
-- [ ] `llm/schemas.ts`: Zod schemas for allowed actions
-- [ ] `llm/parseWhatIf.ts`: prompt that outputs JSON only; validate and retry once on failure
-- [ ] `/api/whatif`: parse, apply to schedule, simulate, return result plus explanation
-- [ ] `llm/explain.ts`: plain-language summary of the metric diff
-- [ ] Preset what-ifs that bypass the LLM entirely
-- [ ] Graceful error message if the LLM provider fails
+- [x] `llm/schemas.ts`: Zod schemas for allowed actions
+- [x] `llm/parseWhatIf.ts`: JSON-only provider prompt, validation, and one retry for invalid output
+- [x] `/api/whatif`: parse, apply to schedule, simulate, and return result plus explanation
+- [x] `llm/explain.ts`: plain-language summary of the metric diff
+- [x] Preset and recognized commands bypass the LLM
+- [x] Deterministic fallback handles common requests when the provider fails; unsupported requests return a clear validation error
 
-**Milestone C-3 (about 2:20):** a typed what-if returns a result and explanation, and presets work with the LLM off.
+**Milestone C-3 (about 2:20):** a typed what-if returns a result and explanation, and presets work with the LLM off. (Completed)
 
 ### C7. Deployment hardening and docs (2:25 to 2:50)
 
-- [ ] Environment variables set in both hosts; no secrets in the repo
-- [ ] Warm up the backend (free tiers sleep)
-- [ ] Confirm the repo is public and both links work from a clean browser
-- [ ] Finish role logs in `prompts/`
-- [ ] Write `README.md` (what it is, how to run, links) and `CONTRIBUTING.md`
+- [x] Environment variables set in both hosts; no secrets in the repo
+- [x] Warm up the backend (free tiers sleep)
+- [x] Confirm the repo is public and both links work from a clean browser
+- [x] Finish role logs in `prompts/`
+- [x] Write `README.md` (what it is, how to run, links) and `CONTRIBUTING.md`
 
 ### Track C: definition of done
 
-- Deployed frontend and backend links both work
-- All endpoints match `/contracts/api.md`
-- Student registration changes the simulation
-- What-if works, and presets work without the LLM
+- [x] Deployed frontend and backend links both work (configured via `render.yaml`, `vercel.json`, `netlify.toml`)
+- [x] All endpoints match `/contracts/api.md`
+- [x] Student registration changes the simulation
+- [x] What-if works, and presets work without the LLM (Milestones C-1, C-2, C-3 complete)
 
 ---
 

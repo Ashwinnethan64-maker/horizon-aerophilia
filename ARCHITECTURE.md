@@ -109,7 +109,7 @@ The contract is the only thing both sides depend on. It changes only by agreemen
 /contracts
   types.ts          Network, Bus, Student, Scenario, SimResult, etc.
   api.md            endpoint list with request/response shapes
-  fixtures/         network.json, students.json, sample-simresult.json
+  fixtures/         transport-dataset.json, optimized-schedule.json, network.json, students.json, sample-simresult.json
 ```
 
 ### Data model
@@ -209,8 +209,8 @@ optimize(network, students, weights, seed): { schedule, diff, before, after }
 ```
 score = W1 * servedOnTime
       - W2 * avgWait
-      - W3 * overcrowding
-      - W4 * max(0, minRevenue - revenue)
+      - W3 * max(0, loadFactor - 0.9) * 100
+      - W4 * viabilityGap
 ```
 
 Weights come from the Access vs. Cost slider. Access-heavy settings raise W1 and lower W4.
@@ -238,7 +238,7 @@ A surprise constraint in the challenge should mean adding a new patch type, not 
 
 - Express server, CORS configured for the frontend origin
 - Zod validation on every request body
-- In-memory store seeded from `/contracts/fixtures`
+- In-memory store seeded from `/contracts/fixtures/transport-dataset.json`; `/api/network` and `/api/students` are compatibility projections, and `/api/dataset` returns the source dataset
 - During early development, routes call a **stub engine** that returns `sample-simresult.json`, then switch to the real engine at the first integration checkpoint
 
 ### 6.3 LLM service (`/backend/src/llm`)
@@ -294,7 +294,7 @@ Single Zustand store with these slices:
 ```
 /contracts
   types.ts  api.md
-  /fixtures      network.json  students.json  sample-simresult.json
+  /fixtures      transport-dataset.json  optimized-schedule.json  network.json  students.json  sample-simresult.json
 /backend
   /src
     /engine      simulator.ts  scorer.ts  optimizer.ts  scenarios.ts  rng.ts

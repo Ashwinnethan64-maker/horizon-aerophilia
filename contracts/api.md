@@ -24,60 +24,15 @@ Check server status.
 Fetch current transportation network (stops, routes, buses).
 
 ### Response `200 OK`
-```json
-{
-  "stops": [
-    { "id": "S1", "name": "Bari Village", "x": 100, "y": 150 },
-    { "id": "S2", "name": "Kishanpur Junction", "x": 250, "y": 180 },
-    { "id": "S3", "name": "Rampur Crossing", "x": 420, "y": 210 },
-    { "id": "S4", "name": "Neelam Valley", "x": 200, "y": 320 },
-    { "id": "S5", "name": "Chandan Bridge", "x": 380, "y": 340 },
-    { "id": "S6", "name": "Govt High School / Inter College", "x": 550, "y": 260 }
-  ],
-  "routes": [
-    {
-      "id": "R1",
-      "name": "Northern Route",
-      "stopIds": ["S1", "S2", "S3", "S6"],
-      "travelMinutes": [15, 20, 20],
-      "destinationStopId": "S6"
-    },
-    {
-      "id": "R2",
-      "name": "Southern Route",
-      "stopIds": ["S4", "S5", "S3", "S6"],
-      "travelMinutes": [18, 15, 20],
-      "destinationStopId": "S6"
-    }
-  ],
-  "buses": [
-    {
-      "id": "B1",
-      "routeId": "R1",
-      "capacity": 35,
-      "departureTimes": ["07:15", "08:30"],
-      "costPerKm": 18,
-      "maxDriverHours": 8
-    },
-    {
-      "id": "B2",
-      "routeId": "R2",
-      "capacity": 30,
-      "departureTimes": ["07:10", "08:35"],
-      "costPerKm": 16,
-      "maxDriverHours": 8
-    },
-    {
-      "id": "B3",
-      "routeId": "R1",
-      "capacity": 35,
-      "departureTimes": ["12:00"],
-      "costPerKm": 18,
-      "maxDriverHours": 6
-    }
-  ]
-}
-```
+Returns a `Network` projection of `transport-dataset.json`. Bus route IDs, route stop IDs, travel times, and fleet IDs correspond to the Mangaluru dataset. The response also includes route distances, simulation ID, recommended optimized allocation, and economics used by the simulator and optimizer.
+
+## 2a. `GET /api/dataset`
+Fetch the source operational dataset used by the backend, including route demand, current and optimized fleet allocations, fleet status, and operating economics. The response shape is `TransportDataset` from `types.ts` and is seeded from `fixtures/transport-dataset.json`.
+
+`GET /api/network` is projected from the same dataset. `GET /api/students` exposes synthetic representative records generated from each route's aggregate demand, distributed evenly among its non-terminal stops; these records are not individual observed registrations.
+
+### Response `200 OK`
+Returns the full dataset object from the fixture.
 
 ---
 
@@ -94,6 +49,7 @@ Request Body:
   "name": "Ravi Kumar",
   "homeStopId": "S1",
   "destinationId": "S6",
+  "routeId": "R01",
   "arriveBy": "08:30",
   "days": [1, 2, 3, 4, 5]
 }
@@ -106,6 +62,7 @@ Response `201 Created`:
   "name": "Ravi Kumar",
   "homeStopId": "S1",
   "destinationId": "S6",
+  "routeId": "R01",
   "arriveBy": "08:30",
   "days": [1, 2, 3, 4, 5]
 }
@@ -115,6 +72,8 @@ Response `201 Created`:
 
 ## 4. `POST /api/simulate`
 Run simulation for given network, schedule, and optional scenario patch.
+
+The current student contract does not contain an individual stop-ready time. The simulator deterministically samples each student's stop arrival between 06:00 and 06:59 from the request seed. Provide a `routeId` on generated route-demand records when a rider must be tied to a particular corridor; manually registered riders can omit it and may use any route serving both stops.
 
 ### Request Body:
 ```json
@@ -153,6 +112,8 @@ Run simulation for given network, schedule, and optional scenario patch.
 ## 5. `POST /api/optimize`
 Execute optimizer to produce a better schedule based on demand and weights.
 
+The optimizer uses seeded random-restart hill climbing with a fixed candidate-evaluation cap. Each diff item includes departure changes and may include `oldRouteId` and `newRouteId` when a bus is reassigned. The precomputed POLALI-001 schedule is considered as a fallback candidate.
+
 ### Request Body:
 ```json
 {
@@ -160,7 +121,7 @@ Execute optimizer to produce a better schedule based on demand and weights.
     "served": 10.0,
     "wait": 2.0,
     "crowding": 1.5,
-    "viability": 1.0
+    "viability": 1.1
   },
   "scenarioId": null,
   "seed": 42
@@ -168,75 +129,7 @@ Execute optimizer to produce a better schedule based on demand and weights.
 ```
 
 ### Response `200 OK`:
-```json
-{
-  "schedule": [
-    {
-      "id": "B1",
-      "routeId": "R1",
-      "capacity": 35,
-      "departureTimes": ["07:05", "08:20"],
-      "costPerKm": 18,
-      "maxDriverHours": 8
-    },
-    {
-      "id": "B2",
-      "routeId": "R2",
-      "capacity": 30,
-      "departureTimes": ["07:10", "08:15"],
-      "costPerKm": 16,
-      "maxDriverHours": 8
-    },
-    {
-      "id": "B3",
-      "routeId": "R1",
-      "capacity": 35,
-      "departureTimes": ["07:45"],
-      "costPerKm": 18,
-      "maxDriverHours": 6
-    }
-  ],
-  "diff": [
-    {
-      "busId": "B1",
-      "oldDepartures": ["07:15", "08:30"],
-      "newDepartures": ["07:05", "08:20"],
-      "changeDescription": "Shifted morning trip 10m earlier to relieve Stop S2 peak"
-    },
-    {
-      "busId": "B3",
-      "oldDepartures": ["12:00"],
-      "newDepartures": ["07:45"],
-      "changeDescription": "Reallocated midday empty bus B3 to 07:45 morning peak relief"
-    }
-  ],
-  "before": {
-    "events": [],
-    "metrics": {
-      "servedOnTime": 65,
-      "stranded": 28,
-      "avgWaitMin": 22.4,
-      "loadFactor": 0.88,
-      "revenue": 1625,
-      "cost": 1950,
-      "viabilityGap": 325
-    }
-  },
-  "after": {
-    "events": [],
-    "metrics": {
-      "servedOnTime": 89,
-      "stranded": 4,
-      "avgWaitMin": 9.2,
-      "loadFactor": 0.82,
-      "revenue": 2225,
-      "cost": 2340,
-      "viabilityGap": 115
-    }
-  },
-  "scoreDelta": 248.5
-}
-```
+Returns an `OptimizationResult` with the simulated schedule, changed bus assignments and departures, baseline and optimized `SimResult`s, and weighted score delta. The route and bus IDs reflect the current network dataset.
 
 ---
 
@@ -255,7 +148,7 @@ Retrieve available preset scenarios.
   {
     "id": "exam_surge",
     "label": "Board Exam Surge",
-    "description": "1.4x student demand and earlier arrival targets",
+    "description": "1.4x student demand",
     "patches": [{ "type": "demandMultiplier", "value": 1.4 }]
   },
   {
@@ -266,15 +159,15 @@ Retrieve available preset scenarios.
   },
   {
     "id": "breakdown_b1",
-    "label": "Bus B1 Breakdown",
-    "description": "Bus B1 is unavailable for service",
-    "patches": [{ "type": "removeBus", "busId": "B1" }]
+    "label": "BUS001 Breakdown",
+    "description": "BUS001 is unavailable for service",
+    "patches": [{ "type": "removeBus", "busId": "BUS001" }]
   },
   {
     "id": "bridge_repair",
-    "label": "Chandan Bridge Closure",
-    "description": "Route R2 unavailable due to bridge maintenance",
-    "patches": [{ "type": "closeRoute", "routeId": "R2" }]
+    "label": "Route R02 Closure",
+    "description": "Route R02 is unavailable",
+    "patches": [{ "type": "closeRoute", "routeId": "R02" }]
   }
 ]
 ```
@@ -284,34 +177,15 @@ Retrieve available preset scenarios.
 ## 7. `POST /api/whatif`
 Natural language scenario translation and simulation.
 
+Recognized presets and common commands are handled locally without an LLM call. For other prompts, when `LLM_API_KEY` is configured the backend uses `LLM_API_URL` and `LLM_MODEL` to call an OpenAI-compatible chat-completions endpoint and validates the returned action, retrying invalid output once. If the provider is unavailable, deterministic rules remain available; unsupported prompts return a clear validation error. Supported actions include shifting, adding, or removing trips; changing capacity; skipping a stop; closing a route; and applying a preset scenario.
+
 ### Request Body:
 ```json
 {
-  "prompt": "Move Bus 3 from noon to 7:45 AM to handle the rush at Bari Village"
+  "prompt": "Move BUS001 to 7:30 AM"
 }
 ```
 
 ### Response `200 OK`:
-```json
-{
-  "parsedAction": {
-    "action": "shift_departure",
-    "busId": "B3",
-    "newTime": "07:45"
-  },
-  "explanation": "Shifted Bus 3 from 12:00 to 07:45. This captures 22 additional students who were previously stranded at Bari Village (S1) and Kishanpur (S2), reducing stranded count from 28 to 6.",
-  "result": {
-    "events": [],
-    "metrics": {
-      "servedOnTime": 87,
-      "stranded": 6,
-      "avgWaitMin": 11.1,
-      "loadFactor": 0.84,
-      "revenue": 2175,
-      "cost": 2340,
-      "viabilityGap": 165
-    }
-  }
-}
-```
+Returns `parsedAction`, an optional `appliedScenario`, `actionDescription`, a metric comparison in `explanation`, and the resulting `SimResult`. Metric values are calculated from the current network and registrations.
 

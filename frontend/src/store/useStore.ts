@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type {
   Network,
   Student,
+  Scenario,
   SimResult,
   Weights,
   Bus,
@@ -52,6 +53,8 @@ interface StoreState {
   setReplayPlaying: (playing: boolean) => void;
   replaySpeed: number;
   setReplaySpeed: (speed: number) => void;
+  isMockMode: boolean;
+  toggleMockMode: () => Promise<void>;
 
   // Core data
   network: Network | null;
@@ -59,6 +62,7 @@ interface StoreState {
   currentSchedule: Bus[];
   optimizedSchedule: Bus[] | null;
   scheduleDiff: ScheduleDiffItem[] | null;
+  scenarios: Scenario[];
   activeScenarioId: string;
   setActiveScenarioId: (id: string) => void;
   weights: Weights;
@@ -106,12 +110,21 @@ export const useStore = create<StoreState>((set, get) => ({
   setReplayPlaying: (replayPlaying) => set({ replayPlaying }),
   replaySpeed: 1,
   setReplaySpeed: (replaySpeed) => set({ replaySpeed }),
+  isMockMode: api.isMock,
+
+  toggleMockMode: async () => {
+    const nextMode = !get().isMockMode;
+    api.setMockMode(nextMode);
+    set({ isMockMode: nextMode });
+    await get().initialize();
+  },
 
   network: null,
   students: [],
   currentSchedule: [],
   optimizedSchedule: null,
   scheduleDiff: null,
+  scenarios: [],
   activeScenarioId: 'baseline',
   setActiveScenarioId: (id) => {
     set({ activeScenarioId: id, scheduleApplied: false });
@@ -122,7 +135,7 @@ export const useStore = create<StoreState>((set, get) => ({
     served: 10.0,
     wait: 2.0,
     crowding: 1.5,
-    viability: 1.0
+    viability: 1.1
   },
   setWeights: (newWeights) =>
     set((state) => ({ weights: { ...state.weights, ...newWeights } })),
@@ -168,14 +181,24 @@ export const useStore = create<StoreState>((set, get) => ({
   initialize: async () => {
     set({ isLoading: true, error: null });
     try {
-      const [network, students] = await Promise.all([
+      const [network, students, scenarios] = await Promise.all([
         api.getNetwork(),
-        api.getStudents()
+        api.getStudents(),
+        api.getScenarios()
       ]);
+      const nextStopId = network.stops.some((s) => s.id === get().selectedStopId)
+        ? get().selectedStopId
+        : (network.stops[1]?.id ?? network.stops[0]?.id ?? null);
+      const nextRouteId = network.routes.some((r) => r.id === get().selectedRouteId)
+        ? get().selectedRouteId
+        : (network.routes[0]?.id ?? null);
       set({
         network,
         students,
+        scenarios,
         currentSchedule: network.buses,
+        selectedStopId: nextStopId,
+        selectedRouteId: nextRouteId,
         isLoading: false
       });
       await get().runSimulation();
@@ -189,7 +212,16 @@ export const useStore = create<StoreState>((set, get) => ({
     try {
       const activeId = scenarioId ?? get().activeScenarioId;
       const res = await api.simulate(activeId);
-      set({ baselineResult: res, isLoading: false, replayTimeIndex: 0 });
+      set({
+        baselineResult: res,
+        optimizedResult: null,
+        optimizedSchedule: null,
+        scheduleDiff: null,
+        scoreDelta: null,
+        viewingOptimized: false,
+        isLoading: false,
+        replayTimeIndex: 0
+      });
     } catch (err: any) {
       set({ error: err.message || 'Simulation failed', isLoading: false });
     }

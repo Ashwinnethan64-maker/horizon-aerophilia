@@ -19,7 +19,7 @@ console.table({
   'Stranded': { Before: opt.before.metrics.stranded, After: opt.after.metrics.stranded },
   'Avg Wait (min)': { Before: opt.before.metrics.avgWaitMin, After: opt.after.metrics.avgWaitMin },
   'Load Factor': { Before: opt.before.metrics.loadFactor, After: opt.after.metrics.loadFactor },
-  'Viability Gap ($)': { Before: opt.before.metrics.viabilityGap, After: opt.after.metrics.viabilityGap }
+  'Viability Gap (₹)': { Before: opt.before.metrics.viabilityGap, After: opt.after.metrics.viabilityGap }
 });
 console.log(`\nScore Improvement: +${opt.scoreDelta}`);
 

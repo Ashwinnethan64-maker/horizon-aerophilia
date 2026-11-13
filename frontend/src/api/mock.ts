@@ -11,9 +11,10 @@ import networkFixture from '../../../contracts/fixtures/network.json';
 import studentsFixture from '../../../contracts/fixtures/students.json';
 import sampleSimResult from '../../../contracts/fixtures/sample-simresult.json';
 
-const mockNetwork: Network = networkFixture as Network;
-const mockStudents: Student[] = studentsFixture as Student[];
-const mockSimResult: SimResult = sampleSimResult as SimResult;
+// In-memory working copies so modifications during a mock session persist
+const mockNetwork: Network = JSON.parse(JSON.stringify(networkFixture));
+let mockStudents: Student[] = JSON.parse(JSON.stringify(studentsFixture));
+const mockSimResult: SimResult = JSON.parse(JSON.stringify(sampleSimResult));
 
 const mockScenarios: Scenario[] = [
   {
@@ -62,18 +63,36 @@ export const mockApi = {
   },
 
   async registerStudent(student: Omit<Student, 'id'>): Promise<Student> {
-    return {
+    const newStudent: Student = {
       ...student,
-      id: `ST-${Math.floor(100 + Math.random() * 900)}`
+      id: `ST-${String(mockStudents.length + 1).padStart(3, '0')}`
     };
+    mockStudents.push(newStudent);
+    return newStudent;
   },
 
   async getScenarios(): Promise<Scenario[]> {
     return JSON.parse(JSON.stringify(mockScenarios));
   },
 
-  async simulate(_scenarioId?: string, _seed?: number): Promise<SimResult> {
-    return JSON.parse(JSON.stringify(mockSimResult));
+  async simulate(scenarioId?: string, _seed?: number): Promise<SimResult> {
+    const result: SimResult = JSON.parse(JSON.stringify(mockSimResult));
+
+    // Dynamic mock adjustments based on scenario
+    if (scenarioId === 'exam_surge') {
+      result.metrics.stranded += 14;
+      result.metrics.avgWaitMin += 4.5;
+      result.metrics.loadFactor = 0.98;
+    } else if (scenarioId === 'breakdown_b1') {
+      result.metrics.servedOnTime = Math.max(0, result.metrics.servedOnTime - 25);
+      result.metrics.stranded += 25;
+      result.metrics.avgWaitMin += 12.0;
+    } else if (scenarioId === 'monsoon_rain') {
+      result.metrics.avgWaitMin += 6.0;
+      result.metrics.stranded += 8;
+    }
+
+    return result;
   },
 
   async optimize(_weights?: Weights, _scenarioId?: string, _seed?: number): Promise<OptimizationResult> {
@@ -137,6 +156,9 @@ export const mockApi = {
         }
       }
     };
+  },
+
+  reset(): void {
+    mockStudents = JSON.parse(JSON.stringify(studentsFixture));
   }
 };
-

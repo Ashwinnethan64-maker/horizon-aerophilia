@@ -3,6 +3,7 @@ import { store } from './store.js';
 import { simulate } from '../engine/simulator.js';
 import { optimize } from '../engine/optimizer.js';
 import { parseWhatIf } from '../llm/parseWhatIf.js';
+import { applyWhatIfAction } from '../llm/applyWhatIf.js';
 import { generateExplanation } from '../llm/explain.js';
 import {
   StudentRegistrationSchema,
@@ -23,6 +24,10 @@ apiRouter.get('/health', (_req: Request, res: Response) => {
 });
 
 // 2. Network definition
+apiRouter.get('/dataset', (_req: Request, res: Response) => {
+  res.json(store.getDataset());
+});
+
 apiRouter.get('/network', (_req: Request, res: Response) => {
   res.json(store.getNetwork());
 });
@@ -57,6 +62,10 @@ apiRouter.post('/simulate', (req: Request, res: Response) => {
 
   const { scenarioId, seed } = parsed.data;
   const scenario = scenarioId ? store.getScenario(scenarioId) : undefined;
+  if (scenarioId && !scenario) {
+    res.status(404).json({ error: `Unknown scenario: ${scenarioId}` });
+    return;
+  }
   const network = store.getNetwork();
   const students = store.getStudents();
 
@@ -72,11 +81,16 @@ apiRouter.post('/optimize', (req: Request, res: Response) => {
     return;
   }
 
-  const { weights, seed } = parsed.data;
+  const { weights, seed, scenarioId } = parsed.data;
+  const scenario = scenarioId ? store.getScenario(scenarioId) : undefined;
+  if (scenarioId && !scenario) {
+    res.status(404).json({ error: `Unknown scenario: ${scenarioId}` });
+    return;
+  }
   const network = store.getNetwork();
   const students = store.getStudents();
 
-  const optResult = optimize(network, students, weights, seed ?? 42);
+  const optResult = optimize(network, students, weights, seed ?? 42, scenario);
   res.json(optResult);
 });
 
@@ -89,33 +103,25 @@ apiRouter.post('/whatif', async (req: Request, res: Response) => {
   }
 
   try {
-    const apiKey = process.env.GEMINI_API_KEY || process.env.LLM_API_KEY;
-    const action = await parseWhatIf(parsed.data.prompt, apiKey);
     const network = store.getNetwork();
     const students = store.getStudents();
-    const baseline = simulate(network, students, undefined, 42);
-
-    let scenarioToApply;
-    if (action.action === 'apply_scenario' && action.scenarioId) {
-      scenarioToApply = store.getScenario(action.scenarioId);
-    } else if (action.action === 'shift_departure' && action.busId && action.newTime) {
-      const bus = network.buses.find(b => b.id === action.busId);
-      if (bus) {
-        bus.departureTimes = [action.newTime];
-      }
-    }
-
-    const result = simulate(network, students, scenarioToApply, 42);
+    const scenarios = store.getScenarios();
+    const apiKey = process.env.LLM_API_KEY || process.env.GEMINI_API_KEY;
+    const action = await parseWhatIf(parsed.data.prompt, apiKey, { network, scenarios });
+    const applied = applyWhatIfAction(network, action, scenarios);
+    const baseline = simulate(network, students, undefined, 42, true);
+    const result = simulate(applied.network, students, applied.scenario, 42, false);
     const explanation = generateExplanation(action, baseline.metrics, result.metrics);
 
     res.json({
       parsedAction: action,
-      appliedScenario: scenarioToApply,
+      ...(applied.scenario ? { appliedScenario: applied.scenario } : {}),
+      actionDescription: applied.description,
       explanation,
       result
     });
   } catch (error: any) {
-    res.status(500).json({ error: error.message || 'What-if processing failed' });
+    res.status(422).json({ error: error.message || 'What-if request could not be applied' });
   }
 });
 

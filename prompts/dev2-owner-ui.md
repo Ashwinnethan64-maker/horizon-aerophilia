@@ -57,3 +57,14 @@ Owner: Track B
   - Verified `contracts/fixtures/network.json` and `frontend/src/api/mock.ts` with real corridor stops and scenario descriptions.
   - Ran `npm --prefix frontend run build` (0 errors) and `npm --prefix backend test` (100% passed).
 - **Issues / Debugging:** Handled React 18 peer dependency conflict with `react-leaflet@5.0.0` by pinning to `react-leaflet@^4.2.1`. Cleaned up unused imports across `SimMap.tsx` and `TransportMap.tsx`.
+
+
+### [2026-11-13 13:53] Prompt #5 — Merge origin/main, Resolve Conflicts & Push
+- **User Prompt:** `origin/main had proceeded out of sync. could you push properly?`
+- **Context / Goal:** Pull and merge `origin/main` (`0a29923`) cleanly into local `main` preserving Track A's backend simulation engine (`POLALI-001`), Track C's Express API / What-If service / Mock Mode toggle, and Track B's YatraGrid Design System + Leaflet OpenStreetMap interface without rewriting git history.
+- **Action Taken / Result:**
+  - Merged `origin/main` (`0a29923`) into local `main` and resolved all merge conflict markers (including pre-existing conflicted blocks committed on `origin/main`) across `PLAN.md`, `README.md`, `backend/.env.example`, `backend/src/api/routes.ts`, `backend/src/llm/explain.ts`, `backend/src/llm/parseWhatIf.ts`, `frontend/src/App.tsx`, `frontend/src/store/useStore.ts`, `frontend/src/components/DemandHeatmap.tsx`, `frontend/src/views/OwnerView.tsx`, and `frontend/src/views/StudentView.tsx`.
+  - Preserved Track A's real `applyWhatIfAction` pipeline and INR explanations (`explain.ts`), added dual OpenAI + Gemini provider support in `parseWhatIf.ts` alongside `parseWithRuleEngine`, and aligned `backend/tests/whatif.test.ts` with the `POLALI-001` catalog and real engine output.
+  - Preserved Track C's runtime `Mock Mode` / `Live API` header toggle in `App.tsx`, adapted `StudentView.tsx` and `OwnerView.tsx` to work seamlessly with both Mock Mode fixtures and live `POLALI-001` data, and added `frontend/src/data/stopCoordinates.ts` wired into `frontend/src/api/client.ts` so all 13 `POLALI-001` stops have real WGS84 Mangaluru–Gurupura–Polali coordinates on the Leaflet map.
+  - Verified zero remaining conflict markers (`grep`), `npm --prefix backend run build` (exit 0), `npm --prefix frontend run build` (`tsc && vite build`, exit 0), and `npm --prefix backend test` (`vitest run`: 3 test files, 38/38 tests passed).
+- **Issues / Debugging:** Fixed `parseRuleBased` regex in `backend/src/llm/parseWhatIf.ts` so phrases like `"What if bus B1 breaks down?"` (`breaks`) match `breakdown_b1` and pass `api.test.ts`.

@@ -1,0 +1,16 @@
+{
+  "simulationId": "POLALI-001",
+  "assignments": [
+    { "busId": "BUS001", "routeId": "R01", "departureTimes": ["07:00"] },
+    { "busId": "BUS002", "routeId": "R01", "departureTimes": ["07:00"] },
+    { "busId": "BUS003", "routeId": "R01", "departureTimes": ["07:00"] },
+    { "busId": "BUS005", "routeId": "R02", "departureTimes": ["07:00"] },
+    { "busId": "BUS006", "routeId": "R02", "departureTimes": ["07:00"] },
+    { "busId": "BUS007", "routeId": "R03", "departureTimes": ["07:00"] },
+    { "busId": "BUS008", "routeId": "R03", "departureTimes": ["07:00"] },
+    { "busId": "BUS009", "routeId": "R03", "departureTimes": ["07:00"] },
+    { "busId": "BUS010", "routeId": "R04", "departureTimes": ["07:00"] },
+    { "busId": "BUS011", "routeId": "R05", "departureTimes": ["07:00"] },
+    { "busId": "BUS012", "routeId": "R05", "departureTimes": ["07:00"] }
+  ]
+}
