@@ -1,0 +1,56 @@
+{
+  "prompt-logger": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py",
+        "timeout": 15
+      }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py",
+        "timeout": 15
+      }
+    ],
+    "PostInvocation": [
+      {
+        "type": "command",
+        "command": "python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py",
+        "timeout": 15
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python .agents/scripts/prompt_logger.py || python3 .agents/scripts/prompt_logger.py",
+        "timeout": 15
+      }
+    ]
+  },
+  "memory-updater": {
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "python .agents/scripts/memory_updater.py || python3 .agents/scripts/memory_updater.py",
+        "timeout": 15
+      }
+    ],
+    "PostInvocation": [
+      {
+        "type": "command",
+        "command": "python .agents/scripts/memory_updater.py || python3 .agents/scripts/memory_updater.py",
+        "timeout": 15
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python .agents/scripts/memory_updater.py || python3 .agents/scripts/memory_updater.py",
+        "timeout": 15
+      }
+    ]
+  }
+}
+

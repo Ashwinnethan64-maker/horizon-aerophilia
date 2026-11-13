@@ -1,0 +1,7 @@
+.agents/.prompt_logger_state.json
+.agents/.memory_updater_state.json
+.agents/.logger.lock
+__pycache__/
+*.pyc
+.env
+
