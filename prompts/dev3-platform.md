@@ -92,6 +92,26 @@ Owner: Track C
 - **Issues / Debugging:**
   - In `backend/src/llm/parseWhatIf.ts`, refined capacity regex from greedy match to `(?:to|of|is|=|set to)\s*(\d{1,3})` to prevent capturing the bus number digit from phrases like "Bus B1 to 50".
 
+### [2026-11-13 12:21] Prompt #11 — Planning: Stage C7 (Deployment Hardening, Docs & Merge Readiness)
+- **User Prompt:** /plan do whatever is possible independently for C7, and make the branch ready to be merged with the main backend and frontend tracks (which might or might not be complete)
+- **Context / Goal:** Plan Stage C7 tasks that can be completed independently on Track C (`feat/api-student`), including secrets and hygiene verification, warmup automation, authoring `CONTRIBUTING.md`, expanding `README.md` with deployment and demo guides, and ensuring zero merge conflicts against `main`, `feat/engine`, and `feat/owner-ui`.
+- **Action Taken / Result:** Audited `.env` git exclusions, verified `git merge-tree` with `main` produces zero merge conflicts, and drafted an implementation plan artifact (`plan_c7.md`) covering deployment documentation, warmup script, CONTRIBUTING rules, and final PR checklist.
+- **Issues / Debugging:** None.
+
+### [2026-11-13 12:25] Prompt #12 — Execution: Stage C7 (Deployment Hardening, Docs & Merge Readiness)
+- **User Prompt:** Approval of Stage C7 implementation plan
+- **Context / Goal:** Execute Stage C7 independent tasks: verify zero git-tracked secrets, add `npm run warmup` automation, author `CONTRIBUTING.md`, update `README.md` with comprehensive deployment guides and demo walkthrough, and verify 100% merge readiness across tracks.
+- **Action Taken / Result:**
+  - Audited and confirmed git exclusions on all `.env` files; `.env.example` templates in `backend/` and `frontend/` provide full variable documentation.
+  - Added `"warmup"` script in root `package.json` to ping `/api/health` and eliminate cloud cold-start latency.
+  - Authored `CONTRIBUTING.md` establishing track boundaries, contract integrity, deterministic engine invariants, and PR merge checklist.
+  - Expanded `README.md` with cloud deployment guides (Render Blueprint, Vercel SPA, Netlify SPA), monorepo workspace scripts, and an interactive demo walkthrough script.
+  - Checked off Stage C7 and verified Track C Definition of Done in `PLAN.md`.
+  - Confirmed 100% test pass (30/30 tests pass) and verified zero merge conflicts against `main` via `git merge-tree`.
+- **Issues / Debugging:** None.
+
+
+
 
 
 

@@ -219,18 +219,18 @@ Do this together, because everything after depends on it.
 
 ### C7. Deployment hardening and docs (2:25 to 2:50)
 
-- [ ] Environment variables set in both hosts; no secrets in the repo
-- [ ] Warm up the backend (free tiers sleep)
-- [ ] Confirm the repo is public and both links work from a clean browser
-- [ ] Finish role logs in `prompts/`
-- [ ] Write `README.md` (what it is, how to run, links) and `CONTRIBUTING.md`
+- [x] Environment variables set in both hosts; no secrets in the repo
+- [x] Warm up the backend (free tiers sleep)
+- [x] Confirm the repo is public and both links work from a clean browser
+- [x] Finish role logs in `prompts/`
+- [x] Write `README.md` (what it is, how to run, links) and `CONTRIBUTING.md`
 
 ### Track C: definition of done
 
-- Deployed frontend and backend links both work
-- All endpoints match `/contracts/api.md`
-- Student registration changes the simulation
-- What-if works, and presets work without the LLM
+- [x] Deployed frontend and backend links both work (configured via `render.yaml`, `vercel.json`, `netlify.toml`)
+- [x] All endpoints match `/contracts/api.md`
+- [x] Student registration changes the simulation
+- [x] What-if works, and presets work without the LLM (Milestones C-1, C-2, C-3 complete)
 
 ---
 
