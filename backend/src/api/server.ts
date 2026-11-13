@@ -27,13 +27,21 @@ app.use(cors({
 
 app.use(express.json());
 
+app.get('/', (_req, res) => {
+  res.json({ status: 'ok', service: 'YatraGrid Backend', health: '/health', api: '/api/health' });
+});
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok', service: 'YatraGrid Backend' });
+});
+
 // API route prefix
 app.use('/api', apiRouter);
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`Backend server running on http://localhost:${PORT}`);
-    console.log(`API endpoints accessible at http://localhost:${PORT}/api`);
+  app.listen(Number(PORT), '0.0.0.0', () => {
+    console.log(`Backend server running on http://0.0.0.0:${PORT}`);
+    console.log(`API endpoints accessible at http://0.0.0.0:${PORT}/api`);
   });
 }
 
