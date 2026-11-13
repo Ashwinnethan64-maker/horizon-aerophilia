@@ -89,7 +89,8 @@ apiRouter.post('/whatif', async (req: Request, res: Response) => {
   }
 
   try {
-    const action = await parseWhatIf(parsed.data.prompt, process.env.LLM_API_KEY);
+    const apiKey = process.env.GEMINI_API_KEY || process.env.LLM_API_KEY;
+    const action = await parseWhatIf(parsed.data.prompt, apiKey);
     const network = store.getNetwork();
     const students = store.getStudents();
     const baseline = simulate(network, students, undefined, 42);

@@ -9,10 +9,41 @@ import type {
 } from '../../../contracts/types.js';
 import { api } from '../api/client.js';
 
+export interface ReportedIssue {
+  id: string;
+  stopId: string;
+  type: 'delayed' | 'overcrowded' | 'not_arrived' | 'other';
+  studentName: string;
+  note: string;
+  timestamp: string;
+  status: 'unverified' | 'acknowledged' | 'resolved';
+}
+
+export type OwnerTab =
+  | 'overview'
+  | 'simulation'
+  | 'optimizer'
+  | 'demand'
+  | 'routes'
+  | 'fleet'
+  | 'financial';
+
 interface StoreState {
-  // UI slice
+  // Navigation & Localization
   role: 'owner' | 'student';
   setRole: (role: 'owner' | 'student') => void;
+  language: 'en' | 'kn';
+  setLanguage: (lang: 'en' | 'kn') => void;
+  activeOwnerTab: OwnerTab;
+  setActiveOwnerTab: (tab: OwnerTab) => void;
+
+  // Selected map entities for inspection
+  selectedStopId: string | null;
+  setSelectedStopId: (id: string | null) => void;
+  selectedRouteId: string | null;
+  setSelectedRouteId: (id: string | null) => void;
+
+  // Status & Replay controls
   isLoading: boolean;
   error: string | null;
   replayTimeIndex: number;
@@ -22,7 +53,7 @@ interface StoreState {
   replaySpeed: number;
   setReplaySpeed: (speed: number) => void;
 
-  // Data slices
+  // Core data
   network: Network | null;
   students: Student[];
   currentSchedule: Bus[];
@@ -33,17 +64,23 @@ interface StoreState {
   weights: Weights;
   setWeights: (w: Partial<Weights>) => void;
 
-  // Results slice
+  // Simulation outputs
   baselineResult: SimResult | null;
   optimizedResult: SimResult | null;
   viewingOptimized: boolean;
   setViewingOptimized: (v: boolean) => void;
   scoreDelta: number | null;
+  scheduleApplied: boolean;
+
+  // Student reports
+  reportedIssues: ReportedIssue[];
+  reportIssue: (issue: Omit<ReportedIssue, 'id' | 'timestamp' | 'status'>) => void;
 
   // Actions
   initialize: () => Promise<void>;
   runSimulation: (scenarioId?: string) => Promise<void>;
   runOptimization: () => Promise<void>;
+  applyOptimizedSchedule: () => void;
   registerStudent: (student: Omit<Student, 'id'>) => Promise<void>;
   executeWhatIf: (prompt: string) => Promise<string>;
 }
@@ -51,6 +88,16 @@ interface StoreState {
 export const useStore = create<StoreState>((set, get) => ({
   role: 'owner',
   setRole: (role) => set({ role }),
+  language: 'en',
+  setLanguage: (language) => set({ language }),
+  activeOwnerTab: 'overview',
+  setActiveOwnerTab: (activeOwnerTab) => set({ activeOwnerTab }),
+
+  selectedStopId: 'S2',
+  setSelectedStopId: (selectedStopId) => set({ selectedStopId }),
+  selectedRouteId: 'R1',
+  setSelectedRouteId: (selectedRouteId) => set({ selectedRouteId }),
+
   isLoading: false,
   error: null,
   replayTimeIndex: 0,
@@ -67,7 +114,7 @@ export const useStore = create<StoreState>((set, get) => ({
   scheduleDiff: null,
   activeScenarioId: 'baseline',
   setActiveScenarioId: (id) => {
-    set({ activeScenarioId: id });
+    set({ activeScenarioId: id, scheduleApplied: false });
     get().runSimulation(id);
   },
 
@@ -85,6 +132,38 @@ export const useStore = create<StoreState>((set, get) => ({
   viewingOptimized: false,
   setViewingOptimized: (viewingOptimized) => set({ viewingOptimized }),
   scoreDelta: null,
+  scheduleApplied: false,
+
+  reportedIssues: [
+    {
+      id: 'REP-101',
+      stopId: 'S2',
+      type: 'overcrowded',
+      studentName: 'Kunal Ghosh',
+      note: 'Bus B1 was packed full at 07:30 AM; 9 of us could not board.',
+      timestamp: '07:32 AM',
+      status: 'acknowledged'
+    },
+    {
+      id: 'REP-102',
+      stopId: 'S3',
+      type: 'delayed',
+      studentName: 'Aarav Sharma',
+      note: 'Morning feeder bus ran 12 minutes late due to road work.',
+      timestamp: '07:44 AM',
+      status: 'unverified'
+    }
+  ],
+
+  reportIssue: (issue) => {
+    const newReport: ReportedIssue = {
+      ...issue,
+      id: `REP-${Math.floor(100 + Math.random() * 900)}`,
+      timestamp: 'Just now',
+      status: 'unverified'
+    };
+    set((state) => ({ reportedIssues: [newReport, ...state.reportedIssues] }));
+  },
 
   initialize: async () => {
     set({ isLoading: true, error: null });
@@ -99,7 +178,6 @@ export const useStore = create<StoreState>((set, get) => ({
         currentSchedule: network.buses,
         isLoading: false
       });
-      // Initial simulation
       await get().runSimulation();
     } catch (err: any) {
       set({ error: err.message || 'Initialization failed', isLoading: false });
@@ -129,11 +207,23 @@ export const useStore = create<StoreState>((set, get) => ({
         scoreDelta: res.scoreDelta,
         viewingOptimized: true,
         isLoading: false,
-        replayTimeIndex: 0
+        replayTimeIndex: 0,
+        scheduleApplied: false
       });
     } catch (err: any) {
       set({ error: err.message || 'Optimization failed', isLoading: false });
     }
+  },
+
+  applyOptimizedSchedule: () => {
+    const { optimizedSchedule, optimizedResult } = get();
+    if (!optimizedSchedule || !optimizedResult) return;
+    set({
+      currentSchedule: optimizedSchedule,
+      baselineResult: optimizedResult,
+      viewingOptimized: false,
+      scheduleApplied: true
+    });
   },
 
   registerStudent: async (studentData) => {

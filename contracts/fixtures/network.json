@@ -1,23 +1,71 @@
 {
   "stops": [
-    { "id": "S1", "name": "Bari Village", "x": 100, "y": 140 },
-    { "id": "S2", "name": "Kishanpur Junction", "x": 260, "y": 170 },
-    { "id": "S3", "name": "Rampur Crossing", "x": 430, "y": 210 },
-    { "id": "S4", "name": "Neelam Valley", "x": 180, "y": 320 },
-    { "id": "S5", "name": "Chandan Bridge", "x": 370, "y": 330 },
-    { "id": "S6", "name": "Govt Inter College & High School", "x": 580, "y": 250 }
+    {
+      "id": "S1",
+      "name": "Mangaluru State Bank",
+      "kannadaName": "ಮಂಗಳೂರು ಸ್ಟೇಟ್ ಬ್ಯಾಂಕ್",
+      "lat": 12.8632,
+      "lng": 74.8378,
+      "x": 100,
+      "y": 140
+    },
+    {
+      "id": "S2",
+      "name": "Kadri / Kulshekar Junction",
+      "kannadaName": "ಕದ್ರಿ / ಕುಲಶೇಖರ ಜಂಕ್ಷನ್",
+      "lat": 12.8805,
+      "lng": 74.8682,
+      "x": 260,
+      "y": 170
+    },
+    {
+      "id": "S3",
+      "name": "Gurupura Junction",
+      "kannadaName": "ಗುರುಪುರ ಜಂಕ್ಷನ್",
+      "lat": 12.9383,
+      "lng": 74.9280,
+      "x": 430,
+      "y": 210
+    },
+    {
+      "id": "S4",
+      "name": "Bondantila Village",
+      "kannadaName": "ಬೊಂಡಂತಿಲ ಗ್ರಾಮ",
+      "lat": 12.9195,
+      "lng": 74.9220,
+      "x": 180,
+      "y": 320
+    },
+    {
+      "id": "S5",
+      "name": "Addoor Bridge Crossing",
+      "kannadaName": "ಅಡ್ಡೂರು ಸೇತುವೆ",
+      "lat": 12.9360,
+      "lng": 74.9430,
+      "x": 370,
+      "y": 330
+    },
+    {
+      "id": "S6",
+      "name": "Polali Govt Inter College & High School",
+      "kannadaName": "ಪೊಳಲಿ ಪದವಿ ಪೂರ್ವ ಕಾಲೇಜು ಮತ್ತು ಪ್ರೌಢಶಾಲೆ",
+      "lat": 12.9340,
+      "lng": 74.9553,
+      "x": 580,
+      "y": 250
+    }
   ],
   "routes": [
     {
       "id": "R1",
-      "name": "Northern Trunk",
+      "name": "Mangaluru–Gurupura–Polali Trunk",
       "stopIds": ["S1", "S2", "S3", "S6"],
       "travelMinutes": [15, 20, 20],
       "destinationStopId": "S6"
     },
     {
       "id": "R2",
-      "name": "Southern Feeder",
+      "name": "Bondantila–Addoor–Polali Feeder",
       "stopIds": ["S4", "S5", "S3", "S6"],
       "travelMinutes": [18, 15, 20],
       "destinationStopId": "S6"
@@ -50,4 +98,3 @@
     }
   ]
 }
-

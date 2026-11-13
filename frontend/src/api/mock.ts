@@ -42,8 +42,8 @@ const mockScenarios: Scenario[] = [
   },
   {
     id: 'bridge_repair',
-    label: 'Chandan Bridge Closure',
-    description: 'Route R2 unavailable due to bridge maintenance',
+    label: 'Addoor Bridge Closure',
+    description: 'Route R2 unavailable due to Addoor river bridge maintenance',
     patches: [{ type: 'closeRoute', routeId: 'R2' }]
   }
 ];

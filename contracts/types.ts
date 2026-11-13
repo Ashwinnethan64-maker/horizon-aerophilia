@@ -3,6 +3,9 @@ export interface Stop {
   name: string;
   x: number;
   y: number;
+  lat?: number;
+  lng?: number;
+  kannadaName?: string;
 }
 
 export interface Route {

@@ -114,40 +114,40 @@ Do this together, because everything after depends on it.
 
 ### B1. Static map (0:20 to 0:50)
 
-- [ ] `SimMap`: SVG with stops, route lines, and labels from `network.json`
-- [ ] Student dots clustered at their home stops
-- [ ] Bus icons positioned at the starting stop
+- [x] `SimMap`: SVG with stops, route lines, and labels from `network.json`
+- [x] Student dots clustered at their home stops
+- [x] Bus icons positioned at the starting stop
 
 ### B2. Replay engine (0:50 to 1:20)
 
-- [ ] Replay driven by the `events` array and a simulated clock
-- [ ] Play, pause, speed (1x, 2x, 4x), and a scrubber
-- [ ] Buses move along routes; boarding moves dots into the bus; stranded dots turn red
-- [ ] Live counters: boarded, waiting, stranded, current time
+- [x] Replay driven by the `events` array and a simulated clock
+- [x] Play, pause, speed (1x, 2x, 4x), and a scrubber
+- [x] Buses move along routes; boarding moves dots into the bus; stranded dots turn red
+- [x] Live counters: boarded, waiting, stranded, current time
 
 **Milestone B-1 (about 1:20):** one complete replay of the sample data plays smoothly.
 
 ### B3. Impact panel and charts (1:20 to 1:50)
 
-- [ ] `ImpactPanel`: served, stranded, average wait, load factor, cost, revenue, viability gap
-- [ ] Before/after comparison with deltas (green for better, red for worse)
-- [ ] `DemandHeatmap`: demand by stop and time slot versus seats offered (Recharts)
+- [x] `ImpactPanel`: served, stranded, average wait, load factor, cost, revenue, viability gap
+- [x] Before/after comparison with deltas (green for better, red for worse)
+- [x] `DemandHeatmap`: demand by stop and time slot versus seats offered (Recharts)
 
 ### B4. Controls (1:50 to 2:20)
 
-- [ ] Before/after toggle that replays baseline or optimized results
-- [ ] **Optimize** button with a loading state
-- [ ] `ScenarioBar`: preset scenario buttons
-- [ ] Access vs. Cost slider that updates weights
-- [ ] Schedule diff panel: "Bus 2: 08:10 to 07:45", and so on
-- [ ] What-if text box (UI only; the API call comes from Track C's client)
+- [x] Before/after toggle that replays baseline or optimized results
+- [x] **Optimize** button with a loading state
+- [x] `ScenarioBar`: preset scenario buttons
+- [x] Access vs. Cost slider that updates weights
+- [x] Schedule diff panel: "Bus 2: 08:10 to 07:45", and so on
+- [x] What-if text box (UI only; the API call comes from Track C's client)
 
 ### B5. Polish (2:20 to 2:30)
 
-- [ ] Empty, loading, and error states
-- [ ] Mobile-friendly layout check
-- [ ] Clear legend and labels so judges understand the map without explanation
-- [ ] Consistent colors and typography
+- [x] Empty, loading, and error states
+- [x] Mobile-friendly layout check
+- [x] Clear legend and labels so judges understand the map without explanation
+- [x] Consistent colors and typography
 
 ### B6. Support (2:30 onward)
 
