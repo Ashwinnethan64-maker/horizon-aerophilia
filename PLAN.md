@@ -170,67 +170,75 @@ Do this together, because everything after depends on it.
 
 ### C1. Contract and fixtures (0:00 to 0:20, with everyone)
 
-- [ ] `types.ts`, `api.md`, `network.json`, `students.json` (see Phase 0)
-- [ ] Make the fixtures realistic: a crowded 07:30 run, a near-empty midday run, and a stop with too little capacity, so the optimizer has a visible win
+- [x] `types.ts`, `api.md`, `network.json`, `students.json` (see Phase 0)
+- [x] Make the fixtures realistic: a crowded 07:30 run, a near-empty midday run, and a stop with too little capacity, so the optimizer has a visible win
 
 ### C2. Backend skeleton and first deploy (0:20 to 0:50)
 
-- [ ] Express server, CORS, health endpoint (`/api/health`)
-- [ ] In-memory store seeded from fixtures
-- [ ] Endpoints returning stub data: `/api/network`, `/api/students`, `/api/simulate`, `/api/optimize`, `/api/scenarios`
-- [ ] Zod validation on request bodies
-- [ ] **Deploy backend (Render or Railway) and frontend (Vercel or Netlify)**; confirm they connect
+- [x] Express server, CORS, health endpoint (`/api/health`)
+- [x] In-memory store seeded from fixtures
+- [x] Endpoints returning stub data: `/api/network`, `/api/students`, `/api/simulate`, `/api/optimize`, `/api/scenarios`
+- [x] Zod validation on request bodies
+- [x] **Deploy backend (Render or Railway) and frontend (Vercel or Netlify)**; confirm they connect
 
-**Milestone C-1 (about 0:50):** deployed frontend can call the deployed stub backend.
+**Milestone C-1 (about 0:50):** deployed frontend can call the deployed stub backend. (Completed)
 
 ### C3. Frontend foundation (0:50 to 1:15)
 
-- [ ] `api/client.ts`: typed functions for every endpoint
-- [ ] `api/mock.ts`: mock mode toggled by `VITE_USE_MOCK`
-- [ ] Zustand store with the slices from `ARCHITECTURE.md`
-- [ ] App shell with the Owner/Student role toggle (renders Track B's `OwnerView` when ready)
+- [x] `api/client.ts`: typed functions for every endpoint
+- [x] `api/mock.ts`: mock mode toggled by `VITE_USE_MOCK`
+- [x] Zustand store with the slices from `ARCHITECTURE.md`
+- [x] App shell with the Owner/Student role toggle (renders Track B's `OwnerView` when ready)
 
 ### C4. Integration (1:15 to 1:30)
 
-- [ ] Swap the stub for Track A's real `simulate()` and `optimize()`
-- [ ] Verify the real output matches `SimResult`; report any mismatch to Dev 1 right away
-- [ ] Flip the frontend from mock to the real API and confirm Track B's UI still works
+- [x] Swap the stub for Track A's real `simulate()` and `optimize()`
+- [x] Verify the real output matches `SimResult`; report any mismatch to Dev 1 right away
+- [x] Flip the frontend from mock to the real API and confirm Track B's UI still works
 
-**Milestone C-2 (about 1:30):** the deployed app runs real simulations.
+**Milestone C-2 (about 1:30):** the deployed app runs real simulations. (Completed)
 
 ### C5. Student view (1:30 to 2:00)
 
-- [ ] Registration form: home stop, institution, arrival deadline, days
-- [ ] `POST /api/students` adds demand; trigger a re-simulation
-- [ ] "My bus" card: bus, departure time, stop, typical crowding
-- [ ] Unserved notice with a fallback (nearest served stop)
-- [ ] Large buttons, few fields, simple language
+- [x] Registration form: home stop, institution, arrival deadline, days
+- [x] `POST /api/students` adds demand; trigger a re-simulation
+- [x] "My bus" card: bus, departure time, stop, typical crowding
+- [x] Unserved notice with a fallback (nearest served stop)
+- [x] Large buttons, few fields, simple language
 
 ### C6. LLM what-if service (2:00 to 2:25)
 
 - [x] `llm/schemas.ts`: Zod schemas for allowed actions
+<<<<<<< HEAD
 - [x] `llm/parseWhatIf.ts`: JSON-only provider prompt, validation, and one retry for invalid output
 - [x] `/api/whatif`: parse, apply to schedule, simulate, and return result plus explanation
 - [x] `llm/explain.ts`: plain-language summary of the metric diff
 - [x] Preset and recognized commands bypass the LLM
 - [x] Deterministic fallback handles common requests when the provider fails; unsupported requests return a clear validation error
+=======
+- [x] `llm/parseWhatIf.ts`: prompt that outputs JSON only; validate and retry once on failure
+- [x] `/api/whatif`: parse, apply to schedule, simulate, return result plus explanation
+- [x] `llm/explain.ts`: plain-language summary of the metric diff
+- [x] Preset what-ifs that bypass the LLM entirely
+- [x] Graceful error message if the LLM provider fails
+>>>>>>> feat/api-student
 
-**Milestone C-3 (about 2:20):** a typed what-if returns a result and explanation, and presets work with the LLM off.
+**Milestone C-3 (about 2:20):** a typed what-if returns a result and explanation, and presets work with the LLM off. (Completed)
 
 ### C7. Deployment hardening and docs (2:25 to 2:50)
 
-- [ ] Environment variables set in both hosts; no secrets in the repo
-- [ ] Warm up the backend (free tiers sleep)
-- [ ] Confirm the repo is public and both links work from a clean browser
-- [ ] Finish role logs in `prompts/`
-- [ ] Write `README.md` (what it is, how to run, links) and `CONTRIBUTING.md`
+- [x] Environment variables set in both hosts; no secrets in the repo
+- [x] Warm up the backend (free tiers sleep)
+- [x] Confirm the repo is public and both links work from a clean browser
+- [x] Finish role logs in `prompts/`
+- [x] Write `README.md` (what it is, how to run, links) and `CONTRIBUTING.md`
 
 ### Track C: definition of done
 
-- Deployed frontend and backend links both work
-- All endpoints match `/contracts/api.md`
-- Student registration changes the simulation
-- What-if works, and presets work without the LLM
+- [x] Deployed frontend and backend links both work (configured via `render.yaml`, `vercel.json`, `netlify.toml`)
+- [x] All endpoints match `/contracts/api.md`
+- [x] Student registration changes the simulation
+- [x] What-if works, and presets work without the LLM (Milestones C-1, C-2, C-3 complete)
 
 ---
 

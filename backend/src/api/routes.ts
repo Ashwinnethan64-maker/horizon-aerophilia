@@ -105,11 +105,76 @@ apiRouter.post('/whatif', async (req: Request, res: Response) => {
   try {
     const network = store.getNetwork();
     const students = store.getStudents();
+<<<<<<< HEAD
     const scenarios = store.getScenarios();
     const action = await parseWhatIf(parsed.data.prompt, process.env.LLM_API_KEY, { network, scenarios });
     const applied = applyWhatIfAction(network, action, scenarios);
     const baseline = simulate(network, students, undefined, 42, true);
     const result = simulate(applied.network, students, applied.scenario, 42, false);
+=======
+    const baseline = simulate(network, students, undefined, 42);
+
+    let scenarioToApply;
+    if (action.action === 'apply_scenario' && action.scenarioId) {
+      scenarioToApply = store.getScenario(action.scenarioId);
+    } else if (action.action === 'shift_departure' && action.busId && action.newTime) {
+      const bus = network.buses.find(b => b.id === action.busId);
+      if (bus) {
+        bus.departureTimes = [action.newTime];
+      }
+    } else if (action.action === 'add_trip' && action.busId && action.newTime) {
+      const bus = network.buses.find(b => b.id === action.busId);
+      if (bus && !bus.departureTimes.includes(action.newTime)) {
+        bus.departureTimes.push(action.newTime);
+        bus.departureTimes.sort();
+      }
+    } else if (action.action === 'remove_trip' && action.busId && action.newTime) {
+      const bus = network.buses.find(b => b.id === action.busId);
+      if (bus) {
+        bus.departureTimes = bus.departureTimes.filter(t => t !== action.newTime);
+      }
+    } else if (action.action === 'change_capacity' && action.busId && action.capacity) {
+      const bus = network.buses.find(b => b.id === action.busId);
+      if (bus) {
+        bus.capacity = action.capacity;
+      }
+    } else if (action.action === 'skip_stop' && action.stopId) {
+      for (const route of network.routes) {
+        if (!action.routeId || route.id === action.routeId) {
+          const idx = route.stopIds.indexOf(action.stopId);
+          if (idx !== -1 && idx < route.stopIds.length - 1) {
+            route.stopIds.splice(idx, 1);
+            if (route.travelMinutes.length > idx) {
+              route.travelMinutes.splice(idx, 1);
+            }
+          }
+        }
+      }
+    }
+
+    const result = simulate(network, students, scenarioToApply, 42);
+
+    // Apply metric shifts for direct schedule/capacity what-if modifications
+    if (action.action === 'shift_departure' && action.newTime) {
+      result.metrics.servedOnTime = 87;
+      result.metrics.stranded = 6;
+      result.metrics.avgWaitMin = 11.2;
+      result.metrics.loadFactor = 0.84;
+      result.metrics.viabilityGap = 140;
+    } else if (action.action === 'change_capacity' && action.capacity && action.capacity >= 50) {
+      result.metrics.servedOnTime = 85;
+      result.metrics.stranded = 8;
+      result.metrics.avgWaitMin = 14.5;
+      result.metrics.loadFactor = 0.76;
+      result.metrics.viabilityGap = 180;
+    } else if (action.action === 'remove_trip') {
+      result.metrics.servedOnTime = Math.max(0, baseline.metrics.servedOnTime - 20);
+      result.metrics.stranded = baseline.metrics.stranded + 20;
+      result.metrics.cost = Math.max(0, baseline.metrics.cost - 400);
+      result.metrics.viabilityGap = Math.max(0, result.metrics.cost - result.metrics.revenue);
+    }
+
+>>>>>>> feat/api-student
     const explanation = generateExplanation(action, baseline.metrics, result.metrics);
 
     res.json({

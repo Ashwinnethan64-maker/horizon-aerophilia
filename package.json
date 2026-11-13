@@ -1,0 +1,19 @@
+{
+  "name": "routeless",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Routeless: The Last Mile - Simulation and optimizer platform for rural student transit",
+  "scripts": {
+    "test": "npm test --prefix backend",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "start:backend": "npm start --prefix backend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "warmup": "node -e \"fetch(process.env.BACKEND_URL || 'http://localhost:3001/api/health').then(r=>r.json()).then(d=>console.log('Warmup probe response:', d)).catch(e=>console.error('Warmup probe failed:', e.message))\"",
+    "sim": "npm run sim --prefix backend",
+    "optimize": "npm run optimize --prefix backend"
+  }
+}
+

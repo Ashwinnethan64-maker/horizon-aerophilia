@@ -168,12 +168,39 @@ export const OwnerView: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="absolute right-1.5 top-1.5 p-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md disabled:opacity-50"
+                  className="absolute right-1.5 top-1.5 p-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md disabled:opacity-50 cursor-pointer"
                 >
                   <Send className="w-3 h-3" />
                 </button>
               </div>
             </form>
+
+            {/* Quick What-If Presets */}
+            <div className="space-y-1.5 pt-2">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                Quick What-If Presets:
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  'Shift Bus 3 to 07:45 AM',
+                  'Increase Bus 1 capacity to 50',
+                  'Cancel Bus 3 12:00 run',
+                  'What if Bus B1 breaks down?'
+                ].map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => {
+                      setWhatIfText(preset);
+                      executeWhatIf(preset).then(exp => setWhatIfResponse(exp)).catch(() => {});
+                    }}
+                    className="text-[11px] px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 rounded-lg border border-slate-200 transition-colors cursor-pointer"
+                  >
+                    {preset}
+                  </button>
+                ))}
+              </div>
+            </div>
             {whatIfResponse && (
               <div className="mt-3 p-2.5 bg-slate-50 rounded-lg border border-slate-100 text-xs text-slate-700 leading-relaxed">
                 {whatIfResponse}

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type {
   Network,
   Student,
+  Scenario,
   SimResult,
   Weights,
   Bus,
@@ -21,6 +22,8 @@ interface StoreState {
   setReplayPlaying: (playing: boolean) => void;
   replaySpeed: number;
   setReplaySpeed: (speed: number) => void;
+  isMockMode: boolean;
+  toggleMockMode: () => Promise<void>;
 
   // Data slices
   network: Network | null;
@@ -28,6 +31,7 @@ interface StoreState {
   currentSchedule: Bus[];
   optimizedSchedule: Bus[] | null;
   scheduleDiff: ScheduleDiffItem[] | null;
+  scenarios: Scenario[];
   activeScenarioId: string;
   setActiveScenarioId: (id: string) => void;
   weights: Weights;
@@ -59,12 +63,21 @@ export const useStore = create<StoreState>((set, get) => ({
   setReplayPlaying: (replayPlaying) => set({ replayPlaying }),
   replaySpeed: 1,
   setReplaySpeed: (replaySpeed) => set({ replaySpeed }),
+  isMockMode: api.isMock,
+
+  toggleMockMode: async () => {
+    const nextMode = !get().isMockMode;
+    api.setMockMode(nextMode);
+    set({ isMockMode: nextMode });
+    await get().initialize();
+  },
 
   network: null,
   students: [],
   currentSchedule: [],
   optimizedSchedule: null,
   scheduleDiff: null,
+  scenarios: [],
   activeScenarioId: 'baseline',
   setActiveScenarioId: (id) => {
     set({ activeScenarioId: id });
@@ -89,18 +102,20 @@ export const useStore = create<StoreState>((set, get) => ({
   initialize: async () => {
     set({ isLoading: true, error: null });
     try {
-      const [network, students] = await Promise.all([
+      const [network, students, scenarios] = await Promise.all([
         api.getNetwork(),
-        api.getStudents()
+        api.getStudents(),
+        api.getScenarios()
       ]);
       set({
         network,
         students,
+        scenarios,
         currentSchedule: network.buses,
         isLoading: false
       });
-      // Initial simulation
-      await get().runSimulation();
+      // Run initial simulation
+      await get().runSimulation('baseline');
     } catch (err: any) {
       set({ error: err.message || 'Initialization failed', isLoading: false });
     }
