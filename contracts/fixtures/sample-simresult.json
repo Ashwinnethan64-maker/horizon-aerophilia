@@ -1,0 +1,35 @@
+{
+  "events": [
+    { "time": "07:10", "minute": 430, "type": "depart", "busId": "B2", "stopId": "S4", "routeId": "R2", "details": "Bus B2 departed Neelam Valley" },
+    { "time": "07:10", "minute": 430, "type": "board", "busId": "B2", "stopId": "S4", "routeId": "R2", "count": 12, "details": "12 students boarded B2 at Neelam Valley" },
+    { "time": "07:15", "minute": 435, "type": "depart", "busId": "B1", "stopId": "S1", "routeId": "R1", "details": "Bus B1 departed Bari Village" },
+    { "time": "07:15", "minute": 435, "type": "board", "busId": "B1", "stopId": "S1", "routeId": "R1", "count": 22, "details": "22 students boarded B1 at Bari Village" },
+    { "time": "07:20", "minute": 440, "type": "bus_position", "busId": "B2", "routeId": "R2", "details": "B2 en route to Chandan Bridge" },
+    { "time": "07:22", "minute": 442, "type": "bus_position", "busId": "B1", "routeId": "R1", "details": "B1 en route to Kishanpur Junction" },
+    { "time": "07:28", "minute": 448, "type": "arrive", "busId": "B2", "stopId": "S5", "routeId": "R2", "details": "B2 arrived at Chandan Bridge" },
+    { "time": "07:28", "minute": 448, "type": "board", "busId": "B2", "stopId": "S5", "routeId": "R2", "count": 12, "details": "12 students boarded B2 at Chandan Bridge (Load: 24/30)" },
+    { "time": "07:30", "minute": 450, "type": "depart", "busId": "B2", "stopId": "S5", "routeId": "R2", "details": "B2 departed Chandan Bridge" },
+    { "time": "07:30", "minute": 450, "type": "arrive", "busId": "B1", "stopId": "S2", "routeId": "R1", "details": "B1 arrived at Kishanpur Junction" },
+    { "time": "07:30", "minute": 450, "type": "board", "busId": "B1", "stopId": "S2", "routeId": "R1", "count": 13, "details": "13 students boarded B1 at Kishanpur Junction (Load: 35/35 Full)" },
+    { "time": "07:30", "minute": 450, "type": "strand", "stopId": "S2", "count": 9, "details": "9 students left stranded at Kishanpur Junction - bus at capacity (35/35)" },
+    { "time": "07:32", "minute": 452, "type": "depart", "busId": "B1", "stopId": "S2", "routeId": "R1", "details": "B1 departed Kishanpur Junction" },
+    { "time": "07:43", "minute": 463, "type": "arrive", "busId": "B2", "stopId": "S3", "routeId": "R2", "details": "B2 arrived at Rampur Crossing" },
+    { "time": "07:43", "minute": 463, "type": "board", "busId": "B2", "stopId": "S3", "routeId": "R2", "count": 6, "details": "6 students boarded B2 at Rampur Crossing (Load: 30/30 Full)" },
+    { "time": "07:43", "minute": 463, "type": "strand", "stopId": "S3", "count": 4, "details": "4 students stranded at Rampur Crossing (B2 full)" },
+    { "time": "07:45", "minute": 465, "type": "depart", "busId": "B2", "stopId": "S3", "routeId": "R2", "details": "B2 departed Rampur Crossing for High School" },
+    { "time": "07:50", "minute": 470, "type": "arrive", "busId": "B1", "stopId": "S3", "routeId": "R1", "details": "B1 arrived at Rampur Crossing" },
+    { "time": "07:50", "minute": 470, "type": "strand", "stopId": "S3", "count": 6, "details": "6 students at Rampur Crossing cannot board B1 (Already full 35/35)" },
+    { "time": "07:52", "minute": 472, "type": "depart", "busId": "B1", "stopId": "S3", "routeId": "R1", "details": "B1 departed Rampur Crossing for High School" },
+    { "time": "08:05", "minute": 485, "type": "arrive", "busId": "B2", "stopId": "S6", "routeId": "R2", "count": 30, "details": "B2 arrived at Govt Inter College - 30 students disembarked on time" },
+    { "time": "08:12", "minute": 492, "type": "arrive", "busId": "B1", "stopId": "S6", "routeId": "R1", "count": 35, "details": "B1 arrived at Govt Inter College - 35 students disembarked on time" }
+  ],
+  "metrics": {
+    "servedOnTime": 65,
+    "stranded": 28,
+    "avgWaitMin": 22.4,
+    "loadFactor": 0.88,
+    "revenue": 1625,
+    "cost": 1950,
+    "viabilityGap": 325
+  }
+}

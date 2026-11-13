@@ -1,0 +1,52 @@
+{
+  "stops": [
+    { "id": "S1", "name": "Bari Village", "x": 100, "y": 140 },
+    { "id": "S2", "name": "Kishanpur Junction", "x": 260, "y": 170 },
+    { "id": "S3", "name": "Rampur Crossing", "x": 430, "y": 210 },
+    { "id": "S4", "name": "Neelam Valley", "x": 180, "y": 320 },
+    { "id": "S5", "name": "Chandan Bridge", "x": 370, "y": 330 },
+    { "id": "S6", "name": "Govt Inter College & High School", "x": 580, "y": 250 }
+  ],
+  "routes": [
+    {
+      "id": "R1",
+      "name": "Northern Trunk",
+      "stopIds": ["S1", "S2", "S3", "S6"],
+      "travelMinutes": [15, 20, 20],
+      "destinationStopId": "S6"
+    },
+    {
+      "id": "R2",
+      "name": "Southern Feeder",
+      "stopIds": ["S4", "S5", "S3", "S6"],
+      "travelMinutes": [18, 15, 20],
+      "destinationStopId": "S6"
+    }
+  ],
+  "buses": [
+    {
+      "id": "B1",
+      "routeId": "R1",
+      "capacity": 35,
+      "departureTimes": ["07:15", "08:30"],
+      "costPerKm": 18,
+      "maxDriverHours": 8
+    },
+    {
+      "id": "B2",
+      "routeId": "R2",
+      "capacity": 30,
+      "departureTimes": ["07:10", "08:35"],
+      "costPerKm": 16,
+      "maxDriverHours": 8
+    },
+    {
+      "id": "B3",
+      "routeId": "R1",
+      "capacity": 35,
+      "departureTimes": ["12:00"],
+      "costPerKm": 18,
+      "maxDriverHours": 6
+    }
+  ]
+}
